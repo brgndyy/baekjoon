@@ -1,5 +1,5 @@
-let input = "abdfhdyrbdbsdfghjkllkjhgfds"; // length = 27;
-
+let input = "qwerty";
+let combinedWord;
 let reverseInput = input.split("").reverse().join("");
 
 if (input === reverseInput) {
@@ -7,11 +7,11 @@ if (input === reverseInput) {
 }
 
 for (let i = input.length - 2; i >= 0; i--) {
-  input += input[i];
+  combinedWord = input + input[i];
 
-  if (input === input.split("").reverse().join("")) {
+  if (combinedWord === combinedWord.split("").reverse().join("")) {
     break;
   }
 }
 
-console.log(input.length);
+console.log(combinedWord.length);
