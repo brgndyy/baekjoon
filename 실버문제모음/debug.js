@@ -16,6 +16,7 @@ let count = 0;
 const DG = input.splice(1, num);
 
 const YS = input.splice(1, num);
+let count = 0;
 
 for (let i = 0; i < DG.length; i++) {
   let DGIndex = DG.indexOf(DG[i]); // 0
