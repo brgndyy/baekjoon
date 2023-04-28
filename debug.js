@@ -1,23 +1,29 @@
 const fs = require("fs");
 const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
 
-const N = Number(input[0].split(" ")[0]);
-const M = Number(input[0].split(" ")[1]);
+let maxLength = 0;
 
-let ballsArr = Array.from({ length: N }, (_, index) => index + 1);
+let splitInput = input.map((str) => str.split(""));
 let answer = "";
 
-for (let i = 1; i < input.length; i++) {
-  let firstNum = Number(input[i].split(" ")[0]) - 1;
-  let secondNum = Number(input[i].split(" ")[1]);
-
-  let sliceArr = ballsArr.slice(firstNum, secondNum).reverse();
-
-  ballsArr.splice(firstNum, secondNum - firstNum, ...sliceArr);
-}
-
-ballsArr.forEach((num) => {
-  return (answer += num + " ");
+splitInput.forEach((arr) => {
+  if (arr.length > maxLength) {
+    maxLength = arr.length;
+  }
 });
 
-console.log(answer.trim());
+for (let i = 0; i < splitInput.length; i++) {
+  if (splitInput[i].length < maxLength) {
+    while (splitInput[i].length < maxLength) {
+      splitInput[i].push("");
+    }
+  }
+}
+
+for (let i = 0; i < splitInput[0].length; i++) {
+  for (let j = 0; j < splitInput.length; j++) {
+    answer += splitInput[j][i];
+  }
+}
+
+console.log(answer);
