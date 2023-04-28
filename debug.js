@@ -18,8 +18,8 @@ const DG = input.splice(1, num);
 const YS = input.splice(1, num);
 
 for (let i = 0; i < DG.length; i++) {
-  let DGIndex = DG.indexOf(DG[i]); // 0
-  let YSIndex = YS.indexOf(DG[i]); // 3
+  let DGIndex = DG.indexOf(DG[i]); // 4
+  let YSIndex = YS.indexOf(DG[i]); // 0
 
   if (YSIndex < DGIndex) {
     count++;
