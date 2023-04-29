@@ -1,4 +1,4 @@
-const input = `15`;
+const input = `14`;
 
 let N = Number(input);
 let lineNum = 0;
@@ -10,6 +10,6 @@ while (N > 0) {
   count++;
 }
 
-console.log(count);
+console.log(lineNum);
 
 //홀수일때 짝수일때를 나눠서
