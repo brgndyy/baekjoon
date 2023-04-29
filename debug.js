@@ -1,15 +1,25 @@
-const input = `15`;
+const fs = require("fs");
+const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
 
-let N = Number(input);
-let lineNum = 0;
-let count = 1;
+const N = Number(input[0].split(" ")[0]);
+const M = Number(input[0].split(" ")[1]); // 4
 
-while (N > 0) {
-  lineNum += count;
-  N -= lineNum;
-  count++;
+let ballsArr = Array(N).fill(0);
+let answer = "";
+
+for (let i = 1; i <= M; i++) {
+  const startIndex = Number(input[i].split(" ")[0]) - 1; // 2
+  const changeBallNum = Number(input[i].split(" ")[1]) - startIndex; // 3
+  const fillBallNum = Number(input[i].split(" ")[1]) - startIndex + 1; // 2
+  let ballNum = []; // [3]
+
+  for (let j = 1; j < fillBallNum; j++) {
+    ballNum.push(Number(input[i].split(" ")[2]));
+  }
+
+  ballsArr.splice(startIndex, changeBallNum, ...ballNum);
 }
 
-console.log(count);
+ballsArr.forEach((num) => (answer += num + " "));
 
-//홀수일때 짝수일때를 나눠서
+console.log(answer.trim());
