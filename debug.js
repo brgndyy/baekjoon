@@ -1,25 +1,28 @@
-const fs = require("fs");
-const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
+let input = `14`;
 
-const N = Number(input[0].split(" ")[0]);
-const M = Number(input[0].split(" ")[1]); // 4
+let N = Number(input);
 
-let ballsArr = Array(N).fill(0);
-let answer = "";
+let count = 1;
 
-for (let i = 1; i <= M; i++) {
-  const startIndex = Number(input[i].split(" ")[0]) - 1; // 2
-  const changeBallNum = Number(input[i].split(" ")[1]) - startIndex; // 3
-  const fillBallNum = Number(input[i].split(" ")[1]) - startIndex + 1; // 2
-  let ballNum = []; // [3]
-
-  for (let j = 1; j < fillBallNum; j++) {
-    ballNum.push(Number(input[i].split(" ")[2]));
-  }
-
-  ballsArr.splice(startIndex, changeBallNum, ...ballNum);
+while (N > 1) {
+  N -= count;
+  count++;
 }
 
-ballsArr.forEach((num) => (answer += num + " "));
+console.log(N);
 
-console.log(answer.trim());
+// 1 : 1/1
+// 2 : 1/2
+// 3 : 2/1
+// 4 : 3/1
+// 5 : 2/2
+// 6 : 1/3
+// 7 : 1/4
+// 8 : 2/3
+// 9 : 3/2
+// 10 : 4/1
+// 11 : 5/1
+// 12 : 4/2
+// 13 : 3/3
+// 14 : 2/4
+// 15 : 1/5
