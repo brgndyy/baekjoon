@@ -1,10 +1,22 @@
 const fs = require("fs");
-const input = fs.readFileSync("/dev/stdin").toString().trim().split();
+const input = fs.readFileSync("/dev/stdin").toString().trim();
 
-let answer;
+const A = Number(input.split(" ")[0]);
+const B = Number(input.split(" ")[1]);
+const V = Number(input.split(" ")[2]);
 
-let reverseInput = input.split("").reverse().join("");
+let day = 0;
+let totalHeight = 0;
 
-input === reverseInput ? (answer = 1) : (answer = 0);
+while (totalHeight < V) {
+  totalHeight += A;
+  day += 1;
 
-console.log(answer);
+  if (totalHeight >= V) {
+    break;
+  }
+
+  totalHeight -= B;
+}
+
+console.log(day);
