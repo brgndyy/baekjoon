@@ -1,24 +1,13 @@
-const fs = require("fs");
-const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
+const input = `30 20
+10 10
+10 20`.split("\n");
 
-let N = Number(input[0]);
-let splitInput = input[1].split(" ");
+let x = [];
+let y = [];
 
-let count = 0;
-
-for (let i = 0; i < splitInput.length; i++) {
-  let decCount = 0;
-  let num = Number(splitInput[i]);
-
-  for (let j = 1; j <= num; j++) {
-    if (num % j === 0) {
-      decCount++;
-    }
-  }
-
-  if (decCount === 2) {
-    count++;
-  }
+for (let i = 0; i < input.length; i++) {
+  x.push(Number(input[i].split(" ")[0]));
+  y.push(Number(input[i].split(" ")[1]));
 }
 
-console.log(count);
+console.log(x);
