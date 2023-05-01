@@ -1,5 +1,5 @@
-const fs = require("fs");
-const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
+const input = `4
+1 3 5 7`.split("\n");
 
 let N = Number(input[0]);
 let splitInput = input[1].split(" ");
