@@ -1,13 +1,14 @@
-const input = `30 20
-10 10
-10 20`.split("\n");
+const fs = require("fs");
+const input = fs.readFileSync("/dev/stdin").toString().trim().split(" ");
 
-let x = [];
-let y = [];
+let numArr = input.map((num) => Number(num)).sort((a, b) => a - b);
 
-for (let i = 0; i < input.length; i++) {
-  x.push(Number(input[i].split(" ")[0]));
-  y.push(Number(input[i].split(" ")[1]));
+let maxLine = numArr.pop(); // 3
+
+let filteredArr = numArr.reduce((a, b) => a + b, 0); // 3
+
+while (maxLine > filteredArr) {
+  maxLine--;
 }
 
-console.log(x);
+console.log(maxLine - 1 + filteredArr);
