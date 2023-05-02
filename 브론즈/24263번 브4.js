@@ -1,4 +1,5 @@
-const input = `7`;
+const fs = require("fs");
+const input = fs.readFileSync("/dev/stdin").toString().trim();
 
-console.log(Number(input));
-console.log(1);
+console.log(Number(input - 2) * Number(input));
+console.log(3);
