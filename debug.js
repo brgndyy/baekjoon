@@ -1,14 +1,20 @@
-const fs = require("fs");
-const input = fs.readFileSync("/dev/stdin").toString().trim().split(" ");
+const input = `1 3 -1 4 1 7`;
 
-let numArr = input.map((num) => Number(num)).sort((a, b) => a - b);
+let inputArr = input.split(" ").map((str) => Number(str));
 
-let maxLine = numArr.pop(); // 3
+let a = inputArr[0];
+let b = inputArr[1];
+let c = inputArr[2];
+let d = inputArr[3];
+let e = inputArr[4];
+let f = inputArr[5];
 
-let filteredArr = numArr.reduce((a, b) => a + b, 0); // 3
-
-while (maxLine > filteredArr) {
-  maxLine--;
+for (let i = -999; i <= 999; i++) {
+  for (let j = -999; j <= 999; j++) {
+    if (a * i + b * j === c && d * i + e * j === f) {
+      console.log(i + " " + j);
+    } else {
+      continue;
+    }
+  }
 }
-
-console.log(maxLine - 1 + filteredArr);
