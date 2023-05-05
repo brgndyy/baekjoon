@@ -1,7 +1,5 @@
-const input = `10
-6 3 2 10 10 10 -10 -10 7 3
-8
-10 9 -5 2 3 4 5 -10`.split("\n");
+const fs = require("fs");
+const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
 
 const N = Number(input[0]);
 
@@ -13,8 +11,12 @@ let findCards = input[3].split(" ");
 
 let cardsMap = new Map();
 
+let answer = [];
+
 numberCards.forEach((card) => {
-  cardsMap.set(card, cardsMap.get(card) + 1 || 0);
+  cardsMap.set(card, cardsMap.get(card) + 1 || 1);
 });
 
-console.log(cardsMap);
+findCards.forEach((card) => answer.push(cardsMap.get(card) || 0));
+
+console.log(answer.join(" "));
