@@ -1,22 +1,21 @@
-const fs = require("fs");
-const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
+const input = `4
+2
+4
+7
+10`.split("\n");
 
-let oneNum = Number(input[0].split(" ")[0]); // 2
-let oneDen = Number(input[0].split(" ")[1]); // 7
-let twoNum = Number(input[1].split(" ")[0]); // 3
-let twoDen = Number(input[1].split(" ")[1]); // 5
+let N = input.shift();
 
-let answer = [];
+const sortInput = input.map((str) => Number(str)).sort((a, b) => a - b);
 
-let totalDen = oneDen * twoDen; // 35
-let totalNum = oneNum * (totalDen / oneDen) + twoNum * (totalDen / twoDen); // 31
+let minusArr = [];
 
-function getGcd(a, b) {
-  return b % a === 0 ? a : getGcd(b % a, a);
+for (let i = 0; i < sortInput.length - 1; i++) {
+  minusArr.push(sortInput[i + 1] - sortInput[i]);
 }
 
-let gcd = getGcd(totalNum, totalDen);
+let minMinus = Math.min(...minusArr);
 
-answer.push(totalNum / gcd, totalDen / gcd);
+console.log(minusArr);
 
-console.log(answer.join(" "));
+// 두 수의 차가 홀수와 짝수가 섞여있을때, 무조건 간격은 1로 되어야함
