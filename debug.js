@@ -1,16 +1,22 @@
-const fs = require("fs");
-const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
+const input = `3
+ENTER
+lms0806
+lms0806`.split("\n");
 
-let T = Number(input[0]);
-let answer = [];
+let N = input.shift();
 
-for (let i = 1; i <= T; i++) {
-  let splitInput = input[i].split("()").join("");
-  while (splitInput.includes("()")) {
-    splitInput = splitInput.split("()").join("");
-  }
+let chatRoom = input.join(" ").split("ENTER");
 
-  splitInput.length === 0 ? answer.push("YES") : answer.push("NO");
+let filtered = chatRoom.map((arr) => arr.trim()).filter((arr) => arr !== "");
+
+let count = 0;
+
+for (let i = 0; i < filtered.length; i++) {
+  let splitMem = filtered[i].split(" ");
+
+  let len = new Set([...splitMem]).size;
+
+  count += len;
 }
 
-console.log(answer.join("\n"));
+console.log(count);
