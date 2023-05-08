@@ -13,7 +13,15 @@ swoon tony9402
 tony9402 bnb2011`.split("\n");
 
 let N = Number(input.shift());
+let memArr = input.map((arr) => arr.split(" "));
+let dancer = new Set();
+dancer.add("ChongChong");
 
-let newDancers = input.map((arr) => arr.split(" ").join(" "));
+memArr.forEach((member) => {
+  if (dancer.has(member[0]) || dancer.has(member[1])) {
+    dancer.add(member[0]);
+    dancer.add(member[1]);
+  }
+});
 
-console.log(newDancers);
+console.log(dancer);

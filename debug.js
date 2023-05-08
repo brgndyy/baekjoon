@@ -1,22 +1,27 @@
-const input = `3
-ENTER
-lms0806
-lms0806`.split("\n");
+const input = `12
+bnb2011 chansol
+chansol chogahui05
+chogahui05 jthis
+jthis ChongChong
+chansol jyheo98
+jyheo98 lms0806
+chansol pichulia
+ChongChong pjshwa
+pjshwa r4pidstart
+r4pidstart swoon
+swoon tony9402
+tony9402 bnb2011`.split("\n");
 
-let N = input.shift();
+let N = Number(input.shift());
+let memArr = input.map((arr) => arr.split(" "));
+let dancer = new Set();
+dancer.add("ChongChong");
 
-let chatRoom = input.join(" ").split("ENTER");
+memArr.forEach((member) => {
+  if (dancer.has(member[0]) || dancer.has(member[1])) {
+    dancer.add(member[0]);
+    dancer.add(member[1]);
+  }
+});
 
-let filtered = chatRoom.map((arr) => arr.trim()).filter((arr) => arr !== "");
-
-let count = 0;
-
-for (let i = 0; i < filtered.length; i++) {
-  let splitMem = filtered[i].split(" ");
-
-  let len = new Set([...splitMem]).size;
-
-  count += len;
-}
-
-console.log(count);
+console.log(dancer);
