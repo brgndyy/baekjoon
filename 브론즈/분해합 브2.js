@@ -1,9 +1,21 @@
-const input = `216`;
+const input = `3`;
 
 let N = Number(input);
 
-let answer = (N - 1).toString();
+let num = N - 1;
+let numArr = [];
 
-// .split('').map(str => Number(str)).reduce((a, b) => a +b, 0);
+while (num > 0) {
+  let splitNum = num
+    .toString()
+    .split("")
+    .reduce((a, b) => Number(a) + Number(b), 0);
 
-console.log(answer);
+  if (num + splitNum === N) {
+    numArr.push(num);
+  } else {
+    num--;
+  }
+}
+
+console.log(numArr);

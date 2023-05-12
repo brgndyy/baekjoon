@@ -1,27 +1,22 @@
-const input = `12
-bnb2011 chansol
-chansol chogahui05
-chogahui05 jthis
-jthis ChongChong
-chansol jyheo98
-jyheo98 lms0806
-chansol pichulia
-ChongChong pjshwa
-pjshwa r4pidstart
-r4pidstart swoon
-swoon tony9402
-tony9402 bnb2011`.split("\n");
+const fs = require("fs");
+const input = fs.readFileSync("/dev/stdin").toString().trim();
+let N = Number(input);
 
-let N = Number(input.shift());
-let memArr = input.map((arr) => arr.split(" "));
-let dancer = new Set();
-dancer.add("ChongChong");
+let num = N - 1;
+let numArr = [];
 
-memArr.forEach((member) => {
-  if (dancer.has(member[0]) || dancer.has(member[1])) {
-    dancer.add(member[0]);
-    dancer.add(member[1]);
+while (num > 0) {
+  let splitNum = num
+    .toString()
+    .split("")
+    .reduce((a, b) => Number(a) + Number(b), 0);
+
+  if (num + splitNum === N) {
+    numArr.push(num);
+    num--;
+  } else {
+    num--;
   }
-});
+}
 
-console.log(dancer);
+numArr.length === 0 ? console.log(0) : console.log(Math.min(...numArr));
