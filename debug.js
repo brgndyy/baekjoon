@@ -1,22 +1,53 @@
-const fs = require("fs");
-const input = fs.readFileSync("/dev/stdin").toString().trim();
-let N = Number(input);
+const input = `5 7
+4 5 1 3 2`.split("\n");
 
-let num = N - 1;
-let numArr = [];
+const A = Number(input[0].split(" ")[0]);
+const K = Number(input[0].split(" ")[1]);
 
-while (num > 0) {
-  let splitNum = num
-    .toString()
-    .split("")
-    .reduce((a, b) => Number(a) + Number(b), 0);
+let arr = input[1].split(" ").map((str) => Number(str));
+let count = 0;
+let target;
 
-  if (num + splitNum === N) {
-    numArr.push(num);
-    num--;
-  } else {
-    num--;
+const merge = (arr1, arr2) => {
+  let result = [];
+  let [i, j] = [0, 0];
+
+  while (i < arr1.length && j < arr2.length) {
+    if (arr1[i] < arr2[j]) {
+      result.push(arr1[i]);
+      i++;
+    } else {
+      result.push(arr2[j]);
+      j++;
+    }
+    count++;
+    if (count === K) target = result[result.length - 1];
   }
-}
 
-numArr.length === 0 ? console.log(0) : console.log(Math.min(...numArr));
+  while (i < arr1.length) {
+    result.push(arr1[i]);
+    i++;
+    count++;
+    if (count === K) target = result[result.length - 1];
+  }
+
+  while (j < arr2.length) {
+    result.push(arr2[j]);
+    j++;
+    count++;
+    if (count === K) target = result[result.length - 1];
+  }
+  return result;
+};
+
+const mergeSort = (arr) => {
+  if (arr.length <= 1) return arr;
+  let mid = Math.ceil(arr.length / 2);
+  let left = mergeSort(arr.slice(0, mid));
+  let right = mergeSort(arr.slice(mid));
+  return merge(left, right);
+};
+
+mergeSort(arr);
+if (!target) target = -1;
+console.log(target);
