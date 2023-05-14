@@ -1,24 +1,21 @@
-const input = `27`;
+const fs = require("fs");
+const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
 
-let N = Number(input);
-let answer = [];
+const N = Number(input[0].split(" ")[0]);
+const M = Number(input[0].split(" ")[1]);
 
-for (let i = 0; i < 27; i++) {
-  for (let j = 0; j < 27; j++) {
-    star(i, j, N);
-  }
+let balls = Array.from({ length: N }, (_, index) => index + 1);
 
-  answer.push("\n");
+for (let i = 1; i <= M; i++) {
+  let startNum = Number(input[i].split(" ")[0]); // 1
+  let endNum = Number(input[i].split(" ")[1]); // 6
+  let midNum = Number(input[i].split(" ")[2]); // 4
+
+  let sliceArr = balls
+    .slice(midNum - 1, endNum)
+    .concat(balls.slice(startNum - 1, midNum - 1));
+
+  balls.splice(startNum - 1, endNum - startNum + 1, ...sliceArr);
 }
 
-function star(i, j, N) {
-  if (i % 3 === 1 && j % 3 === 1) {
-    answer.push(" ");
-  } else if (N === 1) {
-    answer.push("*");
-  } else {
-    star(Math.floor(i / 3), Math.floor(j / 3), Math.floor(N / 3));
-  }
-}
-
-console.log(answer.join(""));
+console.log(balls.join(" "));
