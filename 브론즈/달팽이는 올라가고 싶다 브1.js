@@ -1,22 +1,9 @@
-const input = `2 1 5`;
+const input = `5 1 6`;
 
-const A = Number(input[0]);
-const B = Number(input[1]);
-const V = Number(input[2]);
+let A = Number(input.split(" ")[0]); // 2
+let B = Number(input.split(" ")[1]); // 1
+let V = Number(input.split(" ")[2]); // 5
 
-let day = 0;
-let totalHeight = 1;
+console.log(Math.ceil((V - B) / (A - B)));
 
-while (totalHeight < V) {
-  totalHeight += A;
-
-  if (totalHeight >= B) {
-    break;
-  }
-
-  totalHeight -= B;
-
-  day++;
-}
-
-console.log(day);
+// V-B 는 달팽이가 정상에 도달하기 전까지 이동해야하는거리
