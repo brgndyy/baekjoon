@@ -1,11 +1,8 @@
 const fs = require("fs");
 const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
 
-let N = input.shift();
-let answer = [];
+let N = Number(input.shift());
 
-let sortInput = input
-  .sort((a, b) => Number(a) - Number(b))
-  .forEach((num) => answer.push(num));
+let arr = input.map((str) => Number(str)).sort((a, b) => a - b);
 
-console.log(answer.join("\n"));
+console.log(arr.join("\n"));

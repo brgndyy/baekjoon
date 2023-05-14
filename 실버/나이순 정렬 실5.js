@@ -1,12 +1,13 @@
-const input = `3
-21 Junkyu
-21 Dohyun
-20 Sunyoung`.split("\n");
+const fs = require("fs");
+const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
 
-const N = input.shift();
+let N = Number(input.shift());
 
-let sortedInput = input.sort(
-  (a, b) => Number(a.split(" ")[0]) - Number(b.split(" ")[0])
-);
+let arr = input.map((arr) => arr.split(" "));
 
-console.log(sortedInput.join("\n"));
+let sorted = arr.sort((a, b) => a[0] - b[0]);
+let answer = "";
+
+sorted.forEach((arr) => (answer += arr.join(" ") + "\n"));
+
+console.log(answer);
