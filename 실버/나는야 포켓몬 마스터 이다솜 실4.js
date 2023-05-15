@@ -1,4 +1,4 @@
-const input = `26 5
+let input = `26 5
 Bulbasaur
 Ivysaur
 Venusaur
@@ -30,8 +30,5 @@ Raichu
 3
 Pidgey
 Kakuna`.split("\n");
-
 const N = Number(input[0].split(" ")[0]);
 const M = Number(input[0].split(" ")[1]);
-
-console.log(answer);
