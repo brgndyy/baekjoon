@@ -1,9 +1,12 @@
-const input = `4
+const input = `5
 1
 3
 7
-13`.split("\n");
+13
+17`.split("\n");
 
-const sortInput = input.map((str) => Number(str)).sort((a, b) => a - b);
+let N = Number(input.shift());
 
-console.log(sortInput);
+let sortedInput = input.map((str) => Number(str)).sort((a, b) => a - b);
+
+console.log(sortedInput);
