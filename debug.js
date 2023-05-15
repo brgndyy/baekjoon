@@ -1,18 +1,9 @@
-const fs = require("fs");
-const input = fs.readFileSync("/dev/stdin").toString().trim();
+let input = `3
+100
+6
+20`.split("\n");
 
-let N = Number(input);
+let N = Number(input.shift());
 
-let count = 0;
-
-while (N % 5 !== 0) {
-  N -= 3;
-
-  count++;
-
-  if (N < 0) {
-    break;
-  }
-}
-count += N / 5;
-console.log(Number.isInteger(count) ? count : -1);
+let numArr = input.map((str) => Number(str));
+let answer = [];
