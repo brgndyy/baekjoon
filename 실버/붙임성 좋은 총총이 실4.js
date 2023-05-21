@@ -14,12 +14,4 @@ tony9402 bnb2011`.split("\n");
 
 let N = Number(input.shift());
 
-let dancer = input.map((arr) => arr.split(" "));
-
-let set = new Set();
-
-set.add("ChongChong");
-
-for (let i = 0; i < dancer.length; i++) {}
-
-console.log(dancer);
+console.log(dancer.size);
