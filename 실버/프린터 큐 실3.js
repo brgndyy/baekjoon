@@ -1,38 +1,36 @@
 const input = `3
 6 0
-1 1 9 1 1 1
+1 1 2 1 1 1
 1 0
 5
 4 2
 1 2 3 4`.split("\n");
 
-let TC = Number(input.shift());
-
+let T = Number(input.shift());
 let answer = [];
 
-let queue = [];
+for (let i = 0; i < input.length; i += 2) {
+  let printMap = new Map();
+  let queue = [];
 
-while (input.length) {
-  let documentMap = new Map();
+  // 6, 0
+  let [N, M] = [input[i].split(" ")[0], input[i].split(" ")[1]];
 
-  let splitInput = input.splice(0, 2);
+  // [1, 1, 9, 1, 1, 1];
+  let arr = input[i + 1].split(" ").map((str) => Number(str));
 
-  let [N, M] = [
-    Number(splitInput[0].split(" ")[0]),
-    Number(splitInput[0].split(" ")[1]),
-  ];
-  let importantArr = splitInput[1].split(" ").map((str) => Number(str));
+  for (let j = 0; j < N; j++) {
+    printMap.set(i, arr[j]);
+  }
 
-  let documentArr = Array.from({ length: N }, (_, index) => index + 1).forEach(
-    (doc, index) => documentMap.set(doc, importantArr[index])
-  );
+  // [0, 1]
+  // [1, 1];
+  // [2, 9];
+  // [3, 1];
+  // [4, 1];
+  // [5, 1];
 
-  let maxImportant = Math.max(...importantArr); // 9
+  let printMapArr = [...printMap];
 
-  documentMap.forEach((value, key, index) => {
-    if (value < maxImportant) {
-      let shift = documentArr.shift();
-      documentArr.push(key);
-    }
-  });
+  while (arr.length) {}
 }
