@@ -5,3 +5,5 @@ const input = `2
 3`.split("\n");
 
 let T = Number(input[0]);
+
+let answer = [];
