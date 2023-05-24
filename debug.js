@@ -1,21 +1,39 @@
-const input = `7 3`;
+const input = `3
+6 0
+1 1 9 1 1 1
+1 0
+5
+4 2
+1 2 3 4`.split("\n");
 
-let [N, K] = [Number(input.split(" ")[0]), Number(input.split(" ")[1])];
-
-let numArr = Array.from({ length: N }, (_, index) => index + 1);
-
+let T = Number(input.shift());
 let answer = [];
 
-let indexNum = K - 1;
+for (let i = 0; i < input.length; i += 2) {
+  let [N, M] = [Number(input[i].split(" ")[0]), Number(input[i].split(" ")[1])];
 
-while (answer.length !== N) {
+  let documents = input[i + 1]
+    .split(" ")
+    .map((arr, index) => [index, Number(arr)]);
 
+  let count = 0;
 
-  answer.push(numArr.splice(indexNum, 1));
+  while (true) {
+    let maxNum = Math.max(...documents.map((document) => document[1]));
+    let curDocument = documents.shift();
 
-  indexNum +=
+    if (curDocument[1] === maxNum) {
+      count++;
 
-  
+      if (curDocument[0] === M) {
+        answer.push(count);
+
+        break;
+      }
+    } else {
+      documents.push(curDocument);
+    }
+  }
 }
 
-console.log(answer);
+console.log(answer.join("\n"));

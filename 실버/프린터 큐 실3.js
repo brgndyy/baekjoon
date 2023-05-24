@@ -31,6 +31,21 @@ for (let i = 0; i < input.length; i += 2) {
   // [5, 1];
 
   let printMapArr = [...printMap];
+  let importanceArr = [];
+  printMapArr.forEach((arr) => importanceArr.push(arr[1]));
 
-  while (arr.length) {}
+  let maxImportance = Math.max(...importanceArr); // 9
+
+  for (let k = 0; k < printMapArr.length; k++) {
+    let [documentNum, importance] = [printMapArr[i][0], printMapArr[i][1]];
+
+    if (importance >= maxImportance) {
+      queue.push(printMapArr[i]);
+    } else {
+      let shift = printMapArr.shift();
+
+      printMapArr.push(shift);
+      k = -1;
+    }
+  }
 }
