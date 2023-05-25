@@ -21,16 +21,14 @@ for (let i = 2; i <= N; i++) {
   }
 
   for (let j = i * i; j <= N; j += i) {
-    if (j % arr[i] === 0) {
-      if (arr[j] === true) {
-        arr[j] = false;
-        count++;
-      }
+    if (arr[j] === true) {
+      arr[j] = false;
+      count++;
+    }
 
-      if (count === K) {
-        answer = j;
-        break;
-      }
+    if (count === K) {
+      answer = j;
+      break;
     }
   }
 }
