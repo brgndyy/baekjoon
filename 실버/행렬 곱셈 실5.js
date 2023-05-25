@@ -1,5 +1,10 @@
-const fs = require("fs");
-const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
+const input = `3 2
+1 2
+3 4
+5 6
+2 3
+-1 -2 0
+0 0 3`.split("\n");
 
 let shiftInput = input.shift();
 let answer = [];
@@ -37,19 +42,17 @@ for (let j = 0; j < M; j++) {
 }
 
 for (let k = 0; k < A.length; k++) {
-  for (let z = 0; z < B[0].length; z++) {
-    let sum = 0;
+  let sum = 0;
+
+  for (let z = 0; z < B[k].length; z++) {
     for (let t = 0; t < B.length; t++) {
-      sum += A[k][t] * B[t][z];
+      sum += A[k][t] * B[z][t];
     }
 
     sumArr.push(sum);
   }
 
   answer.push(sumArr);
-  sumArr = [];
 }
 
-for (let i = 0; i < answer.length; i++) {
-  console.log(answer[i].join(" "));
-}
+console.log(answer);
