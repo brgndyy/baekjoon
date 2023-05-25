@@ -2,17 +2,15 @@ let input = `10`;
 
 let N = Number(input);
 
-let answer = 0;
+let result = 0;
 let len = 1;
 let num = 10;
 
-for (let i = 1; i <= N; i++) {
+for (let i = 1; i <= input; i++) {
   if (i % num === 0) {
     len++;
     num *= 10;
   }
-
-  answer += len;
+  result += len;
 }
-
-console.log(answer);
+console.log(result);
