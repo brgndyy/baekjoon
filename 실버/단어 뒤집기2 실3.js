@@ -1,33 +1,38 @@
-const input = `<   space   >space space<    spa   c e>`;
+const input = `<   space   >space space space<    spa   c e>`;
 
-let strArr = [];
+let temp = [];
 let flag = false;
 let answer = [];
 
 for (let i = 0; i < input.length; i++) {
   if (input[i] === "<") {
-    if (strArr.length > 0) {
-      answer = answer.concat(strArr);
-      strArr = [];
+    if (temp.length > 0) {
+      answer = answer.concat(temp);
+      temp = [];
     }
-    flag = true;
     answer.push("<");
+    flag = true;
   } else if (input[i] === ">") {
     answer.push(">");
+
     flag = false;
   } else {
     if (flag) {
       answer.push(input[i]);
     } else {
       if (input[i] === " ") {
-        strArr.push(" ");
-        answer = answer.concat(strArr);
-        strArr = [];
+        temp.push(" ");
+        answer = answer.concat(temp);
+        temp = [];
       } else {
-        strArr.unshift(input[i]);
+        temp.unshift(input[i]);
       }
     }
   }
+}
+
+if (!flag) {
+  answer = answer.concat(temp);
 }
 
 console.log(answer.join(""));
