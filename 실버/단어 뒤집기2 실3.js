@@ -1,38 +1,28 @@
-const input = `<   space   >space space space<    spa   c e>`;
-
-let temp = [];
+const input = `<ab cd>ef gh<ij kl>`;
+let str = input.split("");
 let flag = false;
 let answer = [];
 
-for (let i = 0; i < input.length; i++) {
-  if (input[i] === "<") {
-    if (temp.length > 0) {
-      answer = answer.concat(temp);
-      temp = [];
-    }
-    answer.push("<");
-    flag = true;
-  } else if (input[i] === ">") {
-    answer.push(">");
+for (let i = 0; i < str.length; i++) {
+  let reverseStrArr = [];
 
+  if (str[i] === "<") {
+    if (reverseStrArr.length > 0) {
+      answer.push(reverseStrArr.join(""));
+      reverseStrArr = [];
+    }
+    flag = true;
+    answer.push("<");
+  } else if (str[i] === ">") {
     flag = false;
+    answer.push(">");
   } else {
     if (flag) {
-      answer.push(input[i]);
+      answer.push(str[i]);
     } else {
-      if (input[i] === " ") {
-        temp.push(" ");
-        answer = answer.concat(temp);
-        temp = [];
-      } else {
-        temp.unshift(input[i]);
-      }
+      reverseStrArr.unshift(str[i]);
     }
   }
 }
 
-if (!flag) {
-  answer = answer.concat(temp);
-}
-
-console.log(answer.join(""));
+console.log(answer);

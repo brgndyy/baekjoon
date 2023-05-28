@@ -1,19 +1,27 @@
-const fs = require("fs");
-const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
-
-let T = Number(input.shift());
+const input = `<int>2147483647<long long><max>9223372036854775807`;
+let flag = false;
 let answer = [];
 
-for (let i = 0; i < T; i++) {
-  let splitStr = input[i].split(" ");
-  let strArr = [];
+for (let i = 0; i < input.length; i++) {
+  let reverseStrArr = [];
 
-  for (let j = 0; j < splitStr.length; j++) {
-    let reverseStr = splitStr[j].split("").reverse().join("");
-
-    strArr.push(reverseStr);
+  if (input[i] === "<") {
+    if (reverseStrArr.length > 0) {
+      answer.push(reverseStrArr.join(""));
+      reverseStrArr = [];
+    }
+    flag = true;
+    answer.push("<");
+  } else if (input[i] === ">") {
+    flag = false;
+    answer.push(">");
+  } else {
+    if (flag) {
+      answer.push(input[i]);
+    } else {
+      reverseStrArr.unshift(input[i]);
+    }
   }
-
-  answer.push(strArr.join(" "));
 }
-console.log(answer.join("\n"));
+
+console.log(answer);
