@@ -1,5 +1,5 @@
-const input = `10`;
-
+const fs = require("fs");
+const input = fs.readFileSync("/dev/stdin").toString().trim();
 let N = Number(input);
 
 function fibonaci(n, memo = []) {
@@ -18,4 +18,4 @@ function fibonaci(n, memo = []) {
   return res;
 }
 
-console.log(fibonaci(10));
+console.log(fibonaci(N));
