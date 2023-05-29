@@ -1,36 +1,24 @@
-const fs = require("fs");
-const input = fs.readFileSync("/dev/stdin").toString().trim();
+let input = `7
+SLLSLLS`.split("\n");
 
-let [A, P] = [Number(input.split(" ")[0]), Number(input.split(" ")[1])];
+let N = Number(input[0]); // 사람의 수
+let str = input[1]; // 좌석 정보
 
-let numArr = [];
+let totalCups = N + 1;
+let count = 0;
 
-numArr.push(A);
-let flag = true;
+for (let i = 0; i < str.length; i++) {
+  if (str[i] === "L") {
+    count++;
 
-while (flag) {
-  let nextNum = numArr[numArr.length - 1];
-  let sum = 0;
-  let splitNum = nextNum.toString().split("");
-
-  for (let i = 0; i < splitNum.length; i++) {
-    let one = Number(splitNum[i]);
-    let num = 1;
-
-    for (let j = 1; j <= P; j++) {
-      num *= one;
+    if (count % 2 === 0) {
+      totalCups--;
     }
-
-    sum += num;
-  }
-
-  if (!numArr.includes(sum)) {
-    numArr.push(sum);
-  } else {
-    numArr.splice(numArr.indexOf(sum));
-    flag = false;
-    break;
   }
 }
 
-console.log(numArr.length);
+if (count === 0) {
+  console.log(N);
+} else {
+  console.log(totalCups);
+}
