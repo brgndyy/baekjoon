@@ -1,7 +1,8 @@
-const input = `3
-CPC
-PCP
-CPC`.split("\n");
+const input = `4
+PPPP
+CYZY
+CCPY
+PPCC`.split("\n");
 
 let N = Number(input.shift());
 let board = input.map((arr) => arr.split(""));
@@ -27,10 +28,10 @@ function swap(i, j, k) {
 
 function search() {
   for (let l = 0; l < 2; l++) {
-    for (let x = 0; x < n; x++) {
+    for (let x = 0; x < N; x++) {
       let count = 0;
       let color = curCandy(x, 0, l);
-      for (let y = 0; y < n; y++) {
+      for (let y = 0; y < N; y++) {
         if (curCandy(x, y, l) === color) {
           count++;
           if (count > maxCount) {
@@ -51,8 +52,8 @@ function curCandy(x, y, l) {
 }
 
 let maxCount = 0;
-for (let i = 0; i < n; i++) {
-  for (let j = 0; j < n; j++) {
+for (let i = 0; i < N; i++) {
+  for (let j = 0; j < N; j++) {
     for (let k = 0; k < 4; k++) {
       if (swap(i, j, k)) {
         search();
