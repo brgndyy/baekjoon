@@ -8,6 +8,12 @@ const input = `10101111
 
 let answer = 0;
 
+let inputArr = [];
+
+for (let i = 0; i < 4; i++) {
+  inputArr.push(input[i].split(""));
+}
+
 let K = Number(input[4]);
 
 for (let i = 5; i < input.length; i++) {
@@ -15,123 +21,123 @@ for (let i = 5; i < input.length; i++) {
 
   if (dir === -1) {
     if (topNumber !== 1 || topNumber !== 4) {
-      if (input[topNumber - 1][2] !== input[topNumber][6]) {
-        if (input[topNumber - 1][6] !== input[topNumber - 2][2]) {
-          input[topNumber - 1] = input[topNumber - 1]
-            .split("")
-            .unshift(input[topNumber - 1].split("").pop())
-            .join("");
-          input[topNumber] = input[topNumber]
-            .split("")
-            .push(input[topNumber].split("").shift())
-            .join("");
-          input[topNumber - 2] = input[topNumber - 2]
-            .split("")
-            .push(input[topNumber - 2].split("").shift())
-            .join("");
+      if (inputArr[topNumber - 1][2] !== inputArr[topNumber][6]) {
+        if (inputArr[topNumber - 1][6] !== inputArr[topNumber - 2][2]) {
+          let arr1 = [...inputArr[topNumber - 1]];
+          arr1.push(arr1.shift());
+
+          let arr2 = [...inputArr[topNumber]];
+          arr2.unshift(arr2.pop());
+
+          let arr3 = [...inputArr[topNumber - 2]];
+          arr3.unshift(arr3.pop());
+
+          inputArr[topNumber - 1] = arr1;
+          inputArr[topNumber] = arr2;
+          inputArr[topNumber - 2] = arr3;
         } else {
-          input[topNumber - 1] = input[topNumber - 1]
-            .split("")
-            .unshift(input[topNumber - 1].split("").pop())
-            .join("");
-          input[topNumber] = input[topNumber]
-            .split("")
-            .push(input[topNumber].split("").shift())
-            .join("");
+          let arr1 = [...inputArr[topNumber - 1]];
+          arr1.push(arr1.shift());
+
+          let arr2 = [...inputArr[topNumber]];
+          arr2.unshift(arr2.pop());
+
+          inputArr[topNumber - 1] = arr1;
+          inputArr[topNumber] = arr2;
         }
-      } else if (input[topNumber - 1][6] !== input[topNumber - 2][2]) {
-        input[topNumber - 1] = input[topNumber - 1]
-          .split("")
-          .unshift(input[topNumber - 1].split("").pop())
-          .join("");
-        input[topNumber - 2] = input[topNumber - 2]
-          .split("")
-          .push(input[topNumber - 2].split("").shift())
-          .join("");
+      } else if (inputArr[topNumber - 1][6] !== inputArr[topNumber - 2][2]) {
+        let arr1 = [...inputArr[topNumber - 1]];
+        arr1.push(arr1.shift());
+
+        let arr3 = [...inputArr[topNumber - 2]];
+        arr3.unshift(arr3.pop());
+
+        inputArr[topNumber - 1] = arr1;
+        inputArr[topNumber - 2] = arr3;
       }
     } else if (topNumber === 1) {
-      if (input[topNumber - 1][2] !== input[topNumber][6]) {
-        input[topNumber - 1] = input[topNumber - 1]
-          .split("")
-          .unshift(input[topNumber - 1].split("").pop())
-          .join("");
-        input[topNumber] = input[topNumber]
-          .split("")
-          .push(input[topNumber].split("").shift())
-          .join("");
+      if (inputArr[topNumber - 1][2] !== inputArr[topNumber][6]) {
+        let arr1 = [...inputArr[topNumber - 1]];
+        arr1.push(arr1.shift());
+
+        let arr2 = [...inputArr[topNumber]];
+        arr2.unshift(arr2.pop());
+
+        inputArr[topNumber - 1] = arr1;
+        inputArr[topNumber] = arr2;
       }
     } else if (topNumber === 4) {
-      if (input[topNumber - 1][6] !== input[topNumber - 2][2]) {
-        input[topNumber - 1] = input[topNumber - 1]
-          .split("")
-          .unshift(input[topNumber - 1].split("").pop())
-          .join("");
-        input[topNumber - 2] = input[topNumber - 2]
-          .split("")
-          .push(input[topNumber - 2].split("").shift())
-          .join("");
+      if (inputArr[topNumber - 1][6] !== inputArr[topNumber - 2][2]) {
+        let arr1 = [...inputArr[topNumber - 1]];
+        arr1.push(arr1.shift());
+
+        let arr3 = [...inputArr[topNumber - 2]];
+        arr3.unshift(arr3.pop());
+
+        inputArr[topNumber - 1] = arr1;
+        inputArr[topNumber - 2] = arr3;
       }
     }
   } else if (dir === 1) {
     if (topNumber !== 1 || topNumber !== 4) {
       if (input[topNumber - 1][2] !== input[topNumber][6]) {
         if (input[topNumber - 1][6] !== input[topNumber - 2][2]) {
-          input[topNumber - 1] = input[topNumber - 1]
-            .split("")
-            .push(input[topNumber - 1].split("").shift())
-            .join("");
-          input[topNumber] = input[topNumber]
-            .split("")
-            .unshift(input[topNumber].split("").pop())
-            .join("");
-          input[topNumber - 2] = input[topNumber - 2]
-            .split("")
-            .unshift(input[topNumber - 2].split("").pop())
-            .join("");
+          let arr1 = [...inputArr[topNumber - 1]];
+          arr1.unshift(arr1.pop());
+
+          let arr2 = [...inputArr[topNumber]];
+          arr2.push(arr2.shift());
+
+          let arr3 = [...inputArr[topNumber - 2]];
+          arr3.push(arr3.shift());
+
+          inputArr[topNumber - 1] = arr1;
+          inputArr[topNumber] = arr2;
+          inputArr[topNumber - 2] = arr3;
         } else {
-          input[topNumber - 1] = input[topNumber - 1]
-            .split("")
-            .push(input[topNumber - 1].split("").shift())
-            .join("");
-          input[topNumber] = input[topNumber]
-            .split("")
-            .unshift(input[topNumber].split("").pop())
-            .join("");
+          let arr1 = [...inputArr[topNumber - 1]];
+          arr1.unshift(arr1.pop());
+
+          let arr2 = [...inputArr[topNumber]];
+          arr2.push(arr2.shift());
+
+          inputArr[topNumber - 1] = arr1;
+          inputArr[topNumber] = arr2;
         }
       } else if (input[topNumber - 1][6] !== input[topNumber - 2][2]) {
-        input[topNumber - 1] = input[topNumber - 1]
-          .split("")
-          .push(input[topNumber - 1].split("").shift())
-          .join("");
-        input[topNumber - 2] = input[topNumber - 2]
-          .split("")
-          .unshift(input[topNumber - 2].split("").pop())
-          .join("");
+        let arr1 = [...inputArr[topNumber - 1]];
+        arr1.unshift(arr1.pop());
+
+        let arr3 = [...inputArr[topNumber - 2]];
+        arr3.push(arr3.shift());
+
+        inputArr[topNumber - 1] = arr1;
+        inputArr[topNumber - 2] = arr3;
       }
     } else if (topNumber === 1) {
       if (input[topNumber - 1][2] !== input[topNumber][6]) {
-        input[topNumber - 1] = input[topNumber - 1]
-          .split("")
-          .push(input[topNumber - 1].split("").shift())
-          .join("");
-        input[topNumber] = input[topNumber]
-          .split("")
-          .unshift(input[topNumber].split("").pop())
-          .join("");
+        let arr1 = [...inputArr[topNumber - 1]];
+        arr1.unshift(arr1.pop());
+
+        let arr2 = [...inputArr[topNumber]];
+        arr2.push(arr2.shift());
+
+        inputArr[topNumber - 1] = arr1;
+        inputArr[topNumber] = arr2;
       }
     } else if (topNumber === 4) {
       if (input[topNumber - 1][6] !== input[topNumber - 2][2]) {
-        input[topNumber - 1] = input[topNumber - 1]
-          .split("")
-          .push(input[topNumber - 1].split("").shift())
-          .join("");
-        input[topNumber - 2] = input[topNumber - 2]
-          .split("")
-          .unshift(input[topNumber - 2].split("").pop())
-          .join("");
+        let arr1 = [...inputArr[topNumber - 1]];
+        arr1.unshift(arr1.pop());
+
+        let arr3 = [...inputArr[topNumber - 2]];
+        arr3.push(arr3.shift());
+
+        inputArr[topNumber - 1] = arr1;
+        inputArr[topNumber - 2] = arr3;
       }
     }
   }
 }
 
-console.log(input);
+console.log(inputArr);
