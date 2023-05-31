@@ -1,58 +1,137 @@
-const input = `4 4 2
-1 2 3 4
-5 6 7 8
-9 10 11 12
-13 14 15 16`.split("\n");
+const input = `10101111
+01011101
+11001110
+00000010
+2
+3 -1
+1 1`.split("\n");
 
-let [N, M, R] = input
-  .shift()
-  .split(" ")
-  .map((str) => Number(str));
+let answer = 0;
 
-let arr = input.map((arr) => arr.split(" ").map((str) => Number(str)));
+let K = Number(input[4]);
 
-function main() {
-  let answer = "";
+for (let i = 5; i < input.length; i++) {
+  let [topNumber, dir] = input[i].split(" ").map((str) => Number(str));
 
-  let ret = [...arr];
-  for (let i = 0; i < R; i++) {
-    ret = rotate(arr);
-    arr = [...ret];
+  if (dir === -1) {
+    if (topNumber !== 1 || topNumber !== 4) {
+      if (input[topNumber - 1][2] !== input[topNumber][6]) {
+        if (input[topNumber - 1][6] !== input[topNumber - 2][2]) {
+          input[topNumber - 1] = input[topNumber - 1]
+            .split("")
+            .unshift(input[topNumber - 1].split("").pop())
+            .join("");
+          input[topNumber] = input[topNumber]
+            .split("")
+            .push(input[topNumber].split("").shift())
+            .join("");
+          input[topNumber - 2] = input[topNumber - 2]
+            .split("")
+            .push(input[topNumber - 2].split("").shift())
+            .join("");
+        } else {
+          input[topNumber - 1] = input[topNumber - 1]
+            .split("")
+            .unshift(input[topNumber - 1].split("").pop())
+            .join("");
+          input[topNumber] = input[topNumber]
+            .split("")
+            .push(input[topNumber].split("").shift())
+            .join("");
+        }
+      } else if (input[topNumber - 1][6] !== input[topNumber - 2][2]) {
+        input[topNumber - 1] = input[topNumber - 1]
+          .split("")
+          .unshift(input[topNumber - 1].split("").pop())
+          .join("");
+        input[topNumber - 2] = input[topNumber - 2]
+          .split("")
+          .push(input[topNumber - 2].split("").shift())
+          .join("");
+      }
+    } else if (topNumber === 1) {
+      if (input[topNumber - 1][2] !== input[topNumber][6]) {
+        input[topNumber - 1] = input[topNumber - 1]
+          .split("")
+          .unshift(input[topNumber - 1].split("").pop())
+          .join("");
+        input[topNumber] = input[topNumber]
+          .split("")
+          .push(input[topNumber].split("").shift())
+          .join("");
+      }
+    } else if (topNumber === 4) {
+      if (input[topNumber - 1][6] !== input[topNumber - 2][2]) {
+        input[topNumber - 1] = input[topNumber - 1]
+          .split("")
+          .unshift(input[topNumber - 1].split("").pop())
+          .join("");
+        input[topNumber - 2] = input[topNumber - 2]
+          .split("")
+          .push(input[topNumber - 2].split("").shift())
+          .join("");
+      }
+    }
+  } else if (dir === 1) {
+    if (topNumber !== 1 || topNumber !== 4) {
+      if (input[topNumber - 1][2] !== input[topNumber][6]) {
+        if (input[topNumber - 1][6] !== input[topNumber - 2][2]) {
+          input[topNumber - 1] = input[topNumber - 1]
+            .split("")
+            .push(input[topNumber - 1].split("").shift())
+            .join("");
+          input[topNumber] = input[topNumber]
+            .split("")
+            .unshift(input[topNumber].split("").pop())
+            .join("");
+          input[topNumber - 2] = input[topNumber - 2]
+            .split("")
+            .unshift(input[topNumber - 2].split("").pop())
+            .join("");
+        } else {
+          input[topNumber - 1] = input[topNumber - 1]
+            .split("")
+            .push(input[topNumber - 1].split("").shift())
+            .join("");
+          input[topNumber] = input[topNumber]
+            .split("")
+            .unshift(input[topNumber].split("").pop())
+            .join("");
+        }
+      } else if (input[topNumber - 1][6] !== input[topNumber - 2][2]) {
+        input[topNumber - 1] = input[topNumber - 1]
+          .split("")
+          .push(input[topNumber - 1].split("").shift())
+          .join("");
+        input[topNumber - 2] = input[topNumber - 2]
+          .split("")
+          .unshift(input[topNumber - 2].split("").pop())
+          .join("");
+      }
+    } else if (topNumber === 1) {
+      if (input[topNumber - 1][2] !== input[topNumber][6]) {
+        input[topNumber - 1] = input[topNumber - 1]
+          .split("")
+          .push(input[topNumber - 1].split("").shift())
+          .join("");
+        input[topNumber] = input[topNumber]
+          .split("")
+          .unshift(input[topNumber].split("").pop())
+          .join("");
+      }
+    } else if (topNumber === 4) {
+      if (input[topNumber - 1][6] !== input[topNumber - 2][2]) {
+        input[topNumber - 1] = input[topNumber - 1]
+          .split("")
+          .push(input[topNumber - 1].split("").shift())
+          .join("");
+        input[topNumber - 2] = input[topNumber - 2]
+          .split("")
+          .unshift(input[topNumber - 2].split("").pop())
+          .join("");
+      }
+    }
   }
-  ret.forEach((e) => {
-    answer += e.join(" ") + "\n";
-  });
-
-  return console.log(answer.trim());
 }
-function rotate(arr) {
-  let min = Math.min(N, M);
 
-  // 나눗셈으로 밀기.
-  // 각 모서리 시작점은 다른애가 채워줌.
-  let temp = new Array(N).fill(null).map((_) => new Array(M).fill(0));
-  for (let limit = 0; limit < Math.floor(min / 2); limit++) {
-    // 윗줄.
-    for (let j = M - 2 - limit; j >= 0 + limit; j--) {
-      temp[0 + limit][j] = arr[0 + limit][j + 1];
-    }
-    // 왼쪽.
-    for (let j = 1 + limit; j < N - limit; j++) {
-      temp[j][0 + limit] = arr[j - 1][0 + limit];
-    }
-    // 아래
-    for (let j = 1 + limit; j < M - limit; j++) {
-      temp[N - 1 - limit][j] = arr[N - 1 - limit][j - 1];
-    }
-    // 오른쪽.
-    for (let j = N - 2 - limit; j >= 0 + limit; j--) {
-      temp[j][M - 1 - limit] = arr[j + 1][M - 1 - limit];
-    }
-  }
-  // temp.forEach(e => {
-  //   console.log(e.join(' '))
-  // })
-
-  return temp;
-}
-main();
+console.log(input);
