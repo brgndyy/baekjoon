@@ -1,55 +1,32 @@
-const input = `11 10
-7 4 0
-1 1 1 1 1 1 1 1 1 1
-1 0 0 0 0 0 0 0 0 1
-1 0 0 0 1 1 1 1 0 1
-1 0 0 1 1 0 0 0 0 1
-1 0 1 1 0 0 0 0 0 1
-1 0 0 0 0 0 0 0 0 1
-1 0 0 0 0 0 0 1 0 1
-1 0 0 0 0 0 1 1 0 1
-1 0 0 0 0 0 1 1 0 1
-1 0 0 0 0 0 0 0 0 1
-1 1 1 1 1 1 1 1 1 1`.split("\n");
+const fs = require("fs");
+const input = fs.readFileSync("/dev/stdin").toString().trim();
 
-let [N, M] = input.shift().split(" ").map(Number);
-let [r, c, d] = input.shift().split(" ").map(Number);
+let [N, K] = input.split(" ").map((str) => Number(str));
 
-let roomArr = input.map((row) => row.split(" ").map(Number));
-
+let numArr = Array(N + 1)
+  .fill(true)
+  .fill(false, 0, 2);
 let count = 0;
-let answer = 1;
+let answer = 0;
 
-roomArr[r][c] = 2;
-
-const dx = [-1, 0, 1, 0];
-const dy = [0, 1, 0, -1];
-
-while (true) {
-  if (count === 4) {
-    let back = (d + 2) % 4;
-    let nx = r + dx[back];
-    let ny = c + dy[back];
-    if (roomArr[nx][ny] === 1) {
+for (let i = 2; i <= N; i++) {
+  if (numArr[i]) {
+    numArr[i] = false;
+    count++;
+    if (count === K) {
+      answer = i;
       break;
     }
-    r = nx;
-    c = ny;
-    count = 0;
-  }
-
-  d = (d + 3) % 4;
-  let nx = r + dx[d];
-  let ny = c + dy[d];
-
-  if (roomArr[nx][ny] === 0) {
-    r = nx;
-    c = ny;
-    roomArr[r][c] = 2;
-    answer++;
-    count = 0;
-  } else {
-    count++;
+    for (let j = i * i; j <= N; j += i) {
+      if (numArr[j]) {
+        numArr[j] = false;
+        count++;
+        if (count === K) {
+          answer = j;
+          break;
+        }
+      }
+    }
   }
 }
 
