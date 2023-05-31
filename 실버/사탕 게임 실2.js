@@ -1,8 +1,7 @@
-const input = `4
-PPPP
-CYZY
-CCPY
-PPCC`.split("\n");
+const input = `3
+CPC
+PCP
+CPC`.split("\n");
 
 let N = Number(input.shift());
 let board = input.map((arr) => arr.split(""));
