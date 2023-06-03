@@ -9,25 +9,15 @@ if (input.length === 1) {
     .split(" ")
     .map((str) => Number(str));
   let scoreArr = input[0].split(" ").map((str) => Number(str));
-  scoreArr.push(newScore);
 
-  scoreArr = scoreArr.sort((a, b) => b - a);
-
-  let scoreMap = new Map();
-
-  for (let i = 0; i < scoreArr.length; i++) {
-    let rank = N + 1;
-    let ranker = scoreArr[i];
-    for (let j = 0; j < scoreArr.length; j++) {
-      if (i === j) {
-        continue;
-      } else if (ranker >= scoreArr[j]) {
-        rank--;
-      }
-    }
-
-    scoreMap.set(ranker, rank);
+  if (N === P && newScore <= scoreArr[N - 1]) {
+    console.log(-1);
+    return;
   }
 
-  console.log(scoreMap);
+  scoreArr.push(newScore);
+  scoreArr = scoreArr.sort((a, b) => b - a);
+
+  let rank = scoreArr.indexOf(newScore) + 1;
+  console.log(rank);
 }
