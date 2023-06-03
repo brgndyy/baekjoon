@@ -1,23 +1,44 @@
-const input = `10 1 10
-10 9 8 7 6 5 4 3 2 1`.split("\n");
+const input = `4
+DOG
+DLO
+GOOD
+GOD
+DOL`.split("\n");
 
-if (input.length === 1) {
-  console.log(1);
-} else {
-  let [N, newScore, P] = input
-    .shift()
-    .split(" ")
-    .map((str) => Number(str));
-  let scoreArr = input[0].split(" ").map((str) => Number(str));
+let N = Number(input.shift());
+let standardWord = input.shift().split("");
+let someWords = input.map((str) => str.split(""));
 
-  if (N === P && newScore <= scoreArr[N - 1]) {
-    console.log(-1);
-    return;
-  }
+function solution(standardWord, someWords) {
+  let answer = 0;
 
-  scoreArr.push(newScore);
-  scoreArr = scoreArr.sort((a, b) => b - a);
+  someWords.forEach((v) => {
+    const start = [...standardWord];
 
-  let rank = scoreArr.indexOf(newScore) + 1;
-  console.log(rank);
+    if (v.length < start.length) {
+      for (let i = 0; i < v.length; i++) {
+        if (start.includes(v[i])) {
+          const idx = start.indexOf(v[i]);
+          start.splice(idx, 1);
+        }
+      }
+      if (start.length === 1) {
+        answer++;
+      }
+    } else {
+      for (let i = 0; i < start.length; i++) {
+        if (v.includes(start[i])) {
+          const idx = v.indexOf(start[i]);
+          v.splice(idx, 1);
+        }
+      }
+      if (v.length === 1 || v.length === 0) {
+        answer++;
+      }
+    }
+  });
+
+  return answer;
 }
+
+console.log(solution(standardWord, someWords));
