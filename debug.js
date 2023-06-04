@@ -1,26 +1,90 @@
-const input = `5
-5
-10
-7
-3
-8`.split("\n");
+let input = ["INT", "BOOL", "SHORT", "FLOAT", "LONG", "BOOL"];
 
-let N = Number(input.shift());
-let arr = input.map((str) => Number(str));
+let type = {
+  BOOL: 1,
+  SHORT: 2,
+  FLOAT: 4,
+  INT: 8,
+  LONG: 16,
+};
 
-if (arr.length === 1) {
-  console.log(0);
-} else {
-  let dasom = arr[0];
-  let others = arr.slice(1).sort((a, b) => b - a);
-  let count = 0;
+function solution(input) {
+  let totalSize = 0;
+  let 지금까지메모리 = "";
+  let answer = [];
 
-  while (dasom <= others[0]) {
-    dasom++;
-    others[0]--;
-    count++;
-    others.sort((a, b) => b - a);
+  for (let i = 0; i < input.length; i++) {
+    let curSize = type[input[i]];
+
+    if (curSize === 8) {
+      if (지금까지메모리.length > 0) {
+        지금까지메모리 = 지금까지메모리.padEnd(8, ".");
+        answer.push(지금까지메모리);
+        지금까지메모리 = "";
+        answer.push("########");
+      } else {
+        answer.push("########");
+      }
+    } else if (curSize === 16) {
+      if (지금까지메모리.length > 0) {
+        지금까지메모리 = 지금까지메모리.padEnd(8, ".");
+        answer.push(지금까지메모리);
+        지금까지메모리 = "";
+        answer.push("########");
+        answer.push("########");
+      } else {
+        answer.push("########");
+        answer.push("########");
+      }
+    } else if (curSize === 4) {
+      if (지금까지메모리.length === 1) {
+        지금까지메모리 = "#....####";
+        answer.push(지금까지메모리);
+        지금까지메모리 = "";
+      } else {
+        if (지금까지메모리.length + curSize > 8) {
+          지금까지메모리 = 지금까지메모리.padEnd(8, ".");
+          answer.push(지금까지메모리);
+          지금까지메모리 = "#".repeat(curSize);
+        } else if (지금까지메모리.length + curSize === 8) {
+          지금까지메모리 += "####";
+          answer.push(지금까지메모리);
+          지금까지메모리 = "";
+        } else if (지금까지메모리.length + curSize < 8) {
+          지금까지메모리 += "####";
+        }
+      }
+    } else if (curSize === 2) {
+      if (지금까지메모리.length === 1) {
+        지금까지메모리 = "#.##";
+      } else if (지금까지메모리.length + curSize === 8) {
+        지금까지메모리 += "##";
+        answer.push(지금까지메모리);
+        지금까지메모리 = "";
+      } else if (지금까지메모리.length + curSize > 8) {
+        지금까지메모리 = 지금까지메모리.padEnd(8, ".");
+        answer.push(지금까지메모리);
+        지금까지메모리 = "";
+        지금까지메모리 += "#".repeat(curSize);
+      } else if (지금까지메모리.length + curSize < 8) {
+        지금까지메모리 += "##";
+      }
+    } else if (curSize === 1) {
+      지금까지메모리 += "#";
+    }
   }
 
-  console.log(count);
+  if (지금까지메모리.length > 0) {
+    지금까지메모리 = 지금까지메모리.padEnd(8, ".");
+    answer.push(지금까지메모리);
+    지금까지메모리 = "";
+  }
+
+  if (answer.length > 16) {
+    return "HALT";
+  } else {
+    return answer;
+  }
 }
+
+console.log(solution(input));
