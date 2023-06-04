@@ -1,5 +1,5 @@
 const input = `7 6
-87`.split("\n");
+33`.split("\n");
 
 let [C, R] = input
   .shift()
