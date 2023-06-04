@@ -1,44 +1,33 @@
-const input = `4
-DOG
-DLO
-GOOD
-GOD
-DOL`.split("\n");
+const input = `2
+5 30 25 76 23 78
+6 25 50 70 99 70 90`.split("\n");
 
-let N = Number(input.shift());
-let standardWord = input.shift().split("");
-let someWords = input.map((str) => str.split(""));
+let answer = [];
+let K = Number(input.shift());
+let count = 1;
 
-function solution(standardWord, someWords) {
-  let answer = 0;
+let sortedNums = input
+  .map((arr) => arr.split(" ").map((str) => Number(str)))
+  .map((arr) => arr.sort((a, b) => b - a));
 
-  someWords.forEach((v) => {
-    const start = [...standardWord];
+for (let i = 1; i <= sortedNums.length; i++) {
+  let classNum = i;
+  answer.push(classNum);
+  let maxNum = sortedNums[i - 1][0];
+  let minNum = sortedNums[i - 1][sortedNums[i - 1].length - 1];
+  let gap = 0;
 
-    if (v.length < start.length) {
-      for (let i = 0; i < v.length; i++) {
-        if (start.includes(v[i])) {
-          const idx = start.indexOf(v[i]);
-          start.splice(idx, 1);
-        }
-      }
-      if (start.length === 1) {
-        answer++;
-      }
-    } else {
-      for (let i = 0; i < start.length; i++) {
-        if (v.includes(start[i])) {
-          const idx = v.indexOf(start[i]);
-          v.splice(idx, 1);
-        }
-      }
-      if (v.length === 1 || v.length === 0) {
-        answer++;
-      }
+  for (let j = 0; j < sortedNums[i].length; j++) {
+    let minus = sortedNums[i][j] - sortedNums[i][j + 1];
+
+    if (minus > gap) {
+      gap = minus;
     }
-  });
+  }
 
-  return answer;
+  let str = `Max ${maxNum}, Min ${minNum}, Largest gap ${gap}`;
+
+  answer.push(str);
 }
 
-console.log(solution(standardWord, someWords));
+console.log(answer);
