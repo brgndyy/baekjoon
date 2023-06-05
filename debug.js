@@ -2,7 +2,7 @@ const input = `10 5
 3
 1 4
 3 2
-2 8
+4 2
 2 3`.split("\n");
 
 let [W, H] = input
