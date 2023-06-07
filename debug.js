@@ -1,22 +1,44 @@
-const input = `mobitel`;
+const input = `4
+DOG
+GD
+GOD
+GOOD
+DOLL`.split("\n");
 
-let word = input;
+let N = Number(input.shift());
+let standardWord = input.shift().split("");
+let someWords = input.map((str) => str.split(""));
 
-let minWord = input; // Start with the original word
+function solution(standard, validation) {
+  let answer = 0;
 
-// Iterate through all possible splits of the word into three parts
-for (let i = 1; i < word.length - 1; i++) {
-  for (let j = i + 1; j < word.length; j++) {
-    let part1 = word.slice(0, i).split("").reverse().join("");
-    let part2 = word.slice(i, j).split("").reverse().join("");
-    let part3 = word.slice(j).split("").reverse().join("");
+  validation.forEach((v) => {
+    const start = [...standard];
 
-    let newWord = part1 + part2 + part3;
-
-    if (newWord < minWord) {
-      minWord = newWord; // Update if we found a word that is lexicographically smaller
+    if (v.length < start.length) {
+      for (let i = 0; i < v.length; i++) {
+        if (start.includes(v[i])) {
+          const idx = start.indexOf(v[i]);
+          start.splice(idx, 1);
+        }
+      }
+      if (start.length === 1) {
+        answer++;
+      }
+    } else {
+      for (let i = 0; i < start.length; i++) {
+        if (v.includes(start[i])) {
+          const idx = v.indexOf(start[i]);
+          v.splice(idx, 1);
+        }
+      }
+      if (v.length === 1 || v.length === 0) {
+        answer++;
+      }
     }
-  }
+  });
+
+  return answer;
 }
 
-console.log(minWord);
+console.log(solution(standardWord, someWords));

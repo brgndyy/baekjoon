@@ -1,43 +1,26 @@
 const input = `4
 DOG
+GD
 GOD
 GOOD
 DOLL`.split("\n");
 
 let N = Number(input.shift());
 let standardWord = input.shift().split("");
-let someWords = input.map((str) => str.split(""));
+let count = 0;
 
-// function solution(standard, validation) {
-//     let answer = 0;
+for (let i = 0; i < input.length; i++) {
+  let str = input[i].split("");
+  for (let j = 0; j < standardWord.length; j++) {
+    if (str.includes(standardWord[j])) {
+      str.splice(str.indexOf(standardWord[j]), 1);
+      j = -1;
+    }
+  }
 
-//     validation.forEach((v) => {
-//       const start = [...standard];
+  if (str.length === 0 || str.length === 1) {
+    count++;
+  }
+}
 
-//       if (v.length < start.length) {
-//         for (let i = 0; i < v.length; i++) {
-//           if (start.includes(v[i])) {
-//             const idx = start.indexOf(v[i]);
-//             start.splice(idx, 1);
-//           }
-//         }
-//         if (start.length === 1) {
-//           answer++;
-//         }
-//       } else {
-//         for (let i = 0; i < start.length; i++) {
-//           if (v.includes(start[i])) {
-//             const idx = v.indexOf(start[i]);
-//             v.splice(idx, 1);
-//           }
-//         }
-//         if (v.length === 1 || v.length === 0) {
-//           answer++;
-//         }
-//       }
-//     });
-
-//     return answer;
-//   }
-
-console.log(standardWord);
+console.log(count);
