@@ -1,10 +1,5 @@
-const input = `6 8
-.c......
-........
-.ccc..c.
-....c...
-..c.cc..
-....c...`.split("\n");
+const fs = require("fs");
+const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
 
 let [H, W] = input
   .shift()
