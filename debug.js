@@ -1,27 +1,25 @@
-const fs = require("fs");
-const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
+const input = `3`;
 
-let [K, L] = input
-  .shift()
-  .split(" ")
-  .map((str) => Number(str));
+let N = Number(input);
 
-let answer = [];
-let studentMap = new Map();
+let nums = [1, 5, 10, 50];
 
-for (let i = 0; i < L; i++) {
-  if (studentMap.has(input[i])) {
-    studentMap.delete(input[i]);
-    studentMap.set(input[i], 1);
-  } else {
-    studentMap.set(input[i], 1);
+let count = 1;
+
+let numArr = [1, 5, 10, 50];
+
+while (count < N) {
+  let temp = [];
+
+  for (let i = 0; i < nums.length; i++) {
+    for (let j = 0; j < numArr.length; j++) {
+      temp.push(numArr[j] + nums[i]);
+    }
   }
+
+  numArr = [...new Set(temp)];
+
+  count++;
 }
 
-let studentArr = [...studentMap];
-
-for (let i = 0; i < K; i++) {
-  answer.push(studentArr[i][0]);
-}
-
-console.log(answer.join("\n"));
+console.log(numArr);
