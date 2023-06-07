@@ -1,109 +1,59 @@
-const fs = require("fs");
-const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
+const input = `5
+ZG508OK
+PU305A
+RI604B
+ZG206A
+ZG232ZF
+PU305A
+ZG232ZF
+ZG206A
+ZG508OK
+RI604B`.split("\n");
 
-let colorMap = new Map();
-let numMap = new Map();
-let answer = 0;
+// let N = Number(input.shift());
 
-let colorAndNumArr = input
-  .map((str) => [str.split(" ")[0], Number(str.split(" ")[1])])
-  .sort((a, b) => {
-    if (a[0] === b[0]) {
-      return b[1] - a[1];
-    } else {
-      if (a[0] > b[0]) {
-        return 1;
-      } else {
-        return -1;
-      }
+// let dgArr = [];
+// let dgMap = new Map();
+// let ysArr = [];
+// let ysMap = new Map();
+// let count = 0;
+
+// for (let i = 0; i < input.length; i++) {
+//   if (i < N) {
+//     dgMap.set(input[i], i + 1);
+//   } else {
+//     ysMap.set(input[i], i - N + 1);
+//   }
+// }
+
+// dgMap.forEach((value, key) => {
+//   if (value > ysMap.get(key)) {
+//     count++;
+//   }
+// });
+
+// console.log(count);
+
+let N = Number(input[0]);
+let entry = new Map();
+let exit = new Map();
+let overtake = 0;
+
+for (let i = 0; i < N; i++) {
+  entry.set(input[i + 1], i);
+}
+
+for (let i = 0; i < N; i++) {
+  exit.set(input[i + N + 1], i);
+}
+
+for (let i = 0; i < N; i++) {
+  for (let j = i + 1; j < N; j++) {
+    if (exit.get(input[i + 1]) > exit.get(input[j + 1])) {
+      overtake++;
+      break;
     }
-  });
-
-for (let i = 0; i < colorAndNumArr.length; i++) {
-  let [color, num] = colorAndNumArr[i];
-
-  colorMap.set(color, colorMap.get(color) + 1 || 1);
-  numMap.set(num, numMap.get(num) + 1 || 1);
-}
-
-let numMapArr = [...numMap];
-let twoMinusSet = new Set();
-let sevenArr = [];
-
-if (colorMap.size === 1) {
-  let numArr = [...numMap];
-  let minusSet = new Set();
-
-  for (let i = 0; i < numArr.length - 1; i++) {
-    minusSet.add(numArr[i][0] - numArr[i + 1][0]);
-  }
-
-  if (minusSet.size === 1) {
-    console.log(numArr[0][0] + 900);
-    return;
-  } else {
-    console.log(numArr[0][0] + 600);
-    return;
   }
 }
 
-for (let i = 0; i < numMapArr.length; i++) {
-  let count = numMapArr[i][1];
-
-  if (count === 4) {
-    console.log(numMapArr[i][0] + 800);
-    return;
-  }
-}
-
-if (numMapArr[0][1] === 3 && numMapArr[1][1] === 2) {
-  let sum = numMapArr[0][0] * 10 + numMapArr[1][0] + 700;
-  console.log(sum);
-  return;
-} else if (numMapArr[0][1] === 2 && numMapArr[1][1] === 3) {
-  let sum = numMapArr[1][0] * 10 + numMapArr[0][0] + 700;
-  console.log(sum);
-  return;
-}
-
-for (let j = 0; j < numMapArr.length - 1; j++) {
-  twoMinusSet.add(numMapArr[j][0] - numMapArr[j + 1][0]);
-}
-
-if (twoMinusSet.size === 1) {
-  console.log(numMapArr[0][0] + 500);
-  return;
-}
-
-for (let i = 0; i < numMapArr.length; i++) {
-  if (numMapArr[i][1] === 2) {
-    sevenArr.push(numMapArr[i]);
-  }
-}
-
-if (sevenArr.length === 2) {
-  if (sevenArr[0][0] > sevenArr[1][0]) {
-    let sum = sevenArr[0][0] * 10 + sevenArr[1][0] + 300;
-    console.log(sum);
-    return;
-  } else {
-    let sum = sevenArr[1][0] * 10 + sevenArr[0][0] + 300;
-    console.log(sum);
-    return;
-  }
-}
-
-if (sevenArr.length === 1) {
-  let sum = sevenArr[0][0] + 200;
-  console.log(sum);
-  return;
-}
-
-for (let i = 0; i < numMapArr.length; i++) {
-  if (numMapArr[i][1] === 3) {
-    console.log(numMapArr[i][0] + 400);
-    return;
-  }
-}
-
-console.log(numMapArr[0][0] + 100);
+console.log(overtake);
