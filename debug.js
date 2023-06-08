@@ -1,63 +1,112 @@
-const fs = require("fs");
-const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
+const input = `7 8 1
+0 0 0 0 0 0 0 9
+0 0 0 0 3 0 0 8
+-1 0 5 0 0 0 22 0
+-1 8 0 0 0 0 0 0
+0 0 0 0 0 10 43 0
+0 0 5 0 15 0 0 0
+0 0 40 0 0 0 20 0`.split("\n");
 
-let cards = input.split(" ").map((str) => str);
+let [R, C, T] = input
+  .shift()
+  .split(" ")
+  .map((str) => Number(str));
 
-let numSet = new Set();
+let board = input.map((board) => board.split(" ").map((str) => Number(str)));
+let miseBoard = input.map((board) =>
+  board.split(" ").map((str) => Number(str))
+);
 
-let sigyeNum = findSigyeNum(cards);
+let dir = [
+  [-1, 0],
+  [0, 1],
+  [1, 0],
+  [0, -1],
+];
 
-numSet.add(sigyeNum);
+// 공기 청정기 위치 찾기
+let cleanPos = [];
 
-let countNum = sigyeNum - 1; // 1121
-
-while (countNum.toString().length === 4) {
-  let splitCountNum = countNum.toString().split("");
-  let num;
-
-  if (splitCountNum.includes("0")) {
-    countNum = Number(splitCountNum.join(""));
-    countNum--;
-  } else {
-    num = findSigyeNum(splitCountNum);
-
-    if (num < sigyeNum) {
-      numSet.add(num);
+for (let i = 0; i < R; i++) {
+  for (let j = 0; j < C; j++) {
+    if (board[i][j] === -1) {
+      cleanPos.push([i, j]);
     }
-    countNum = Number(splitCountNum.join(""));
-    countNum--;
   }
 }
 
-function findSigyeNum(splitCountNum) {
-  let numArr = [];
+while (T !== 0) {
+  T--;
+  // 먼지 확산
+  // 공기청정기 윗부분 위치들
+  let [cleanerOnePosH, cleanerOnePosY] = [cleanPos[0][0], cleanPos[0][1]];
+  let [cleanerTwoPosH, cleanerTwoPosY] = [cleanPos[1][0], cleanPos[1][1]];
 
-  for (let i = 0; i < 4; i++) {
-    let str1;
-    let str2;
-    let str3;
-    let str4;
+  for (let i = cleanerOnePosH; i >= 0; i--) {
+    for (let j = cleanerOnePosY; j < C; j++) {
+      if (board[i][j] !== 0 && board[i][j] !== -1) {
+        let num = board[i][j];
+        let count = 0;
 
-    if (i >= 1) {
-      str1 = splitCountNum[i];
-      str2 = splitCountNum[(i + 1) % 4];
-      str3 = splitCountNum[(i + 2) % 4];
-      str4 = splitCountNum[(i + 3) % 4];
-    } else {
-      str1 = splitCountNum[i];
-      str2 = splitCountNum[i + 1];
-      str3 = splitCountNum[i + 2];
-      str4 = splitCountNum[i + 3];
+        for (let k = 0; k < 4; k++) {
+          let nx = i + dir[k][0];
+          let ny = j + dir[k][1];
+
+          if (nx >= 0 && ny >= 0 && nx < R && ny < C && board[nx][ny] !== -1) {
+            count++;
+          }
+        }
+
+        let 확산량 = Math.floor(num / 5);
+        let 남은미세먼지량 = num - 확산량 * count;
+        miseBoard[i][j] = 남은미세먼지량;
+
+        for (let k = 0; k < 4; k++) {
+          let nx = i + dir[k][0];
+          let ny = j + dir[k][1];
+
+          if (nx >= 0 && ny >= 0 && nx < R && ny < C && board[nx][ny] !== -1) {
+            miseBoard[nx][ny] += 확산량;
+          }
+        }
+      }
     }
-
-    let str = str1 + str2 + str3 + str4;
-
-    numArr.push(Number(str));
   }
 
-  return Math.min(...numArr);
+  for (let i = cleanerTwoPosH; i < R; i++) {
+    for (let j = cleanerTwoPosY; j < C; j++) {
+      if (board[i][j] !== 0 && board[i][j] !== -1) {
+        let num = board[i][j];
+        let count = 0;
+
+        for (let k = 0; k < 4; k++) {
+          let nx = i + dir[k][0];
+          let ny = j + dir[k][1];
+
+          if (nx >= 0 && ny >= 0 && nx < R && ny < C && board[nx][ny] !== -1 && ) {
+            count++;
+          }
+        }
+
+        let 확산량 = Math.floor(num / 5);
+        let 남은미세먼지량 = num - 확산량 * count;
+        miseBoard[i][j] = 남은미세먼지량;
+
+        for (let k = 0; k < 4; k++) {
+          let nx = i + dir[k][0];
+          let ny = j + dir[k][1];
+
+          if (nx >= 0 && ny >= 0 && nx < R && ny < C && board[nx][ny] !== -1) {
+            miseBoard[nx][ny] += 확산량;
+          }
+        }
+      }
+    }
+  }
+
+
+
+  
 }
 
-let totalArr = [...numSet];
-
-console.log(totalArr.indexOf(sigyeNum) + 1);
+console.log(miseBoard);
