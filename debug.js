@@ -1,94 +1,63 @@
 const fs = require("fs");
 const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
 
-let chessBoard = Array.from({ length: 6 }, () => Array(6).fill(0));
+let cards = input.split(" ").map((str) => str);
 
-let answer = true;
+let numSet = new Set();
 
-let [startType, startNum] = [
-  input[0].split("")[0],
-  Number(input[0].split("")[1]),
-];
-startNum -= 1;
-let startTypeNum;
-if (startType === "A") {
-  startTypeNum = 0;
-} else if (startType === "B") {
-  startTypeNum = 1;
-} else if (startType === "C") {
-  startTypeNum = 2;
-} else if (startType === "D") {
-  startTypeNum = 3;
-} else if (startType === "E") {
-  startTypeNum = 4;
-} else if (startType === "F") {
-  startTypeNum = 5;
-}
+let sigyeNum = findSigyeNum(cards);
 
-chessBoard[startTypeNum][startNum] = 1;
-let [firstTypeNum, firstNum] = [startTypeNum, startNum];
+numSet.add(sigyeNum);
 
-for (let i = 1; i < input.length; i++) {
-  let [boardType, boardNum] = [
-    input[i].split("")[0],
-    Number(input[i].split("")[1]),
-  ];
-  let boardTypeNum;
-  boardNum -= 1;
+let countNum = sigyeNum - 1; // 1121
 
-  if (boardType === "A") {
-    boardTypeNum = 0;
-  } else if (boardType === "B") {
-    boardTypeNum = 1;
-  } else if (boardType === "C") {
-    boardTypeNum = 2;
-  } else if (boardType === "D") {
-    boardTypeNum = 3;
-  } else if (boardType === "E") {
-    boardTypeNum = 4;
-  } else if (boardType === "F") {
-    boardTypeNum = 5;
-  }
+while (countNum.toString().length === 4) {
+  let splitCountNum = countNum.toString().split("");
+  let num;
 
-  if (
-    chessBoard[boardTypeNum][boardNum] === 0 &&
-    ((Math.abs(boardTypeNum - startTypeNum) === 2 &&
-      Math.abs(boardNum - startNum) === 1) ||
-      (Math.abs(boardTypeNum - startTypeNum) === 1 &&
-        Math.abs(boardNum - startNum) === 2))
-  ) {
-    chessBoard[boardTypeNum][boardNum] = 1;
-    startTypeNum = boardTypeNum;
-    startNum = boardNum;
+  if (splitCountNum.includes("0")) {
+    countNum = Number(splitCountNum.join(""));
+    countNum--;
   } else {
-    answer = false;
-    break;
-  }
-}
+    num = findSigyeNum(splitCountNum);
 
-if (
-  !(
-    (Math.abs(firstTypeNum - startTypeNum) === 2 &&
-      Math.abs(firstNum - startNum) === 1) ||
-    (Math.abs(firstTypeNum - startTypeNum) === 1 &&
-      Math.abs(firstNum - startNum) === 2)
-  )
-) {
-  answer = false;
-}
-
-// 모든 칸이 방문되었는지 확인
-for (let i = 0; i < 6; i++) {
-  for (let j = 0; j < 6; j++) {
-    if (chessBoard[i][j] === 0) {
-      answer = false;
-      break;
+    if (num < sigyeNum) {
+      numSet.add(num);
     }
+    countNum = Number(splitCountNum.join(""));
+    countNum--;
   }
 }
 
-if (answer) {
-  console.log("Valid");
-} else {
-  console.log("Invalid");
+function findSigyeNum(splitCountNum) {
+  let numArr = [];
+
+  for (let i = 0; i < 4; i++) {
+    let str1;
+    let str2;
+    let str3;
+    let str4;
+
+    if (i >= 1) {
+      str1 = splitCountNum[i];
+      str2 = splitCountNum[(i + 1) % 4];
+      str3 = splitCountNum[(i + 2) % 4];
+      str4 = splitCountNum[(i + 3) % 4];
+    } else {
+      str1 = splitCountNum[i];
+      str2 = splitCountNum[i + 1];
+      str3 = splitCountNum[i + 2];
+      str4 = splitCountNum[i + 3];
+    }
+
+    let str = str1 + str2 + str3 + str4;
+
+    numArr.push(Number(str));
+  }
+
+  return Math.min(...numArr);
 }
+
+let totalArr = [...numSet];
+
+console.log(totalArr.indexOf(sigyeNum) + 1);
