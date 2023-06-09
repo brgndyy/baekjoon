@@ -1,5 +1,9 @@
-const input = `1
-1 20:00`.split("\n");
+const input = `5
+1 01:10
+1 02:20
+2 45:30
+2 46:40
+2 47:50`.split("\n");
 
 let N = Number(input.shift());
 
