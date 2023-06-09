@@ -6,27 +6,21 @@ const input = `3
 let N = Number(input.shift());
 let studentsArr = [...input];
 
-let count = studentsArr[0].length;
-let flag = true;
+let count = 0;
 
-while (flag) {
-  let studentMap = new Map();
-  count--;
+while (true) {
+  let studentSet = new Set();
+  count++;
 
   for (let i = 0; i < N; i++) {
-    studentsArr[i] = studentsArr[i].split("");
-    studentsArr[i].splice(0, 1);
-    studentsArr[i] = studentsArr[i].join("");
+    let str = studentsArr[i].substring(studentsArr[i].length - count);
 
-    studentMap.set(studentsArr[i], studentMap.get(studentsArr[i]) + 1 || 1);
+    studentSet.add(str);
   }
 
-  studentMap.forEach((value, key) => {
-    if (value === 2) {
-      flag = false;
-      count++;
-    }
-  });
+  if (studentSet.size === N) {
+    break;
+  }
 }
 
 console.log(count);
