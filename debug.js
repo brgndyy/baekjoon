@@ -14,7 +14,8 @@ while (flag) {
   count--;
 
   for (let i = 0; i < N; i++) {
-    studentsArr[i].split("").splice(0, 1);
+    studentsArr[i] = studentsArr[i].split("");
+    studentsArr[i].splice(0, 1);
     studentsArr[i] = studentsArr[i].join("");
 
     studentMap.set(studentsArr[i], studentMap.get(studentsArr[i]) + 1 || 1);
@@ -23,6 +24,7 @@ while (flag) {
   studentMap.forEach((value, key) => {
     if (value === 2) {
       flag = false;
+      count++;
     }
   });
 }
