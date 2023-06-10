@@ -1,50 +1,57 @@
-const input = `DLIII
-MCMXL`.split("\n");
+const input = `5 1
+1 2 0 0 0
+1 2 0 0 0
+1 2 0 0 0
+1 2 0 0 0
+1 2 0 0 0`.split("\n");
 
-let answer = [];
-let strArr = input.map((str) => str.split(""));
-let totalNum = 0;
+let [N, M] = input
+  .shift()
+  .split(" ")
+  .map((str) => Number(str));
 
-let pros = {
-  I: 1,
-  V: 5,
-  X: 10,
-  L: 50,
-  C: 100,
-  D: 500,
-  M: 1000,
-};
+let board = input.map((str) => str.split(" ").map((str) => Number(str)));
+let chickenArr = [];
+let houseArr = [];
 
-for (let i = 0; i < 2; i++) {
-  let sum = 0;
-
-  for (let j = 0; j < strArr[i].length; j++) {
-    if (strArr[i][j] === "I" && strArr[i][j + 1] === "V") {
-      sum += 4;
-      j++;
-    } else if (strArr[i][j] === "I" && strArr[i][j + 1] === "X") {
-      sum += 9;
-      j++;
-    } else if (strArr[i][j] === "X" && strArr[i][j + 1] === "L") {
-      sum += 40;
-      j++;
-    } else if (strArr[i][j] === "X" && strArr[i][j + 1] === "C") {
-      sum += 90;
-      j++;
-    } else if (strArr[i][j] === "C" && strArr[i][j + 1] === "D") {
-      sum += 400;
-      j++;
-    } else if (strArr[i][j] === "C" && strArr[i][j + 1] === "M") {
-      sum += 900;
-      j++;
-    } else {
-      sum += pros[strArr[i][j]];
+for (let i = 0; i < N; i++) {
+  for (let j = 0; j < N; j++) {
+    if (board[i][j] === 2) {
+      chickenArr.push([i, j]);
+    } else if (board[i][j] === 1) {
+      houseArr.push([i, j]);
     }
   }
-
-  totalNum += sum;
 }
 
-answer.push(totalNum);
+let combinations = getCombinations(chickenArr, M);
+let minDistSum = Infinity;
 
-console.log(totalNum);
+combinations.forEach((combination) => {
+  let distSum = 0;
+  houseArr.forEach((house) => {
+    let minDist = Math.min(
+      ...combination.map((chicken) => getDist(house, chicken))
+    );
+    distSum += minDist;
+  });
+  minDistSum = Math.min(minDistSum, distSum);
+});
+
+console.log(minDistSum);
+
+function getCombinations(arr, selectNumber) {
+  const results = [];
+  if (selectNumber === 1) return arr.map((value) => [value]);
+  arr.forEach((fixed, index, origin) => {
+    const rest = origin.slice(index + 1);
+    const combinations = getCombinations(rest, selectNumber - 1);
+    const attached = combinations.map((combination) => [fixed, ...combination]);
+    results.push(...attached);
+  });
+  return results;
+}
+
+function getDist(pos1, pos2) {
+  return Math.abs(pos1[0] - pos2[0]) + Math.abs(pos1[1] - pos2[1]);
+}
