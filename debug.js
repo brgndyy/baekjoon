@@ -1,7 +1,7 @@
-const input = `3 4
-JLA
-CRUO
-3`.split("\n");
+const input = `3 3
+ABC
+DEF
+2`.split("\n");
 
 let [N1, N2] = input[0].split(" ").map(Number);
 let right = input[1];
