@@ -48,26 +48,12 @@ numberOneMatchNum = firstDice[numberOneMatchIndex];
 
 bottomNum = minNum;
 
-let nums = [];
-
-for (let i = 0; i < firstDice.length; i++) {
-  if (firstDice[i] === bottomNum || firstDice[i] === numberOneMatchNum) {
-    continue;
-  } else {
-    nums.push(firstDice[i]);
-  }
-}
-
-let firstMaxNum = Math.min(...nums);
-
-// 0
 if (bottomNum === minNum) {
   let topNum = numberOneMatchNum;
-  let sum = firstMaxNum;
+  let sum = 0;
 
   for (let i = 0; i < N - 1; i++) {
     let matchBottomIndex = diceArr[i].indexOf(topNum);
-    bottomNum = diceArr[i][matchBottomIndex];
     let matchTopIndex = 0;
     let numArr = [];
 
@@ -88,59 +74,15 @@ if (bottomNum === minNum) {
     topNum = diceArr[i][matchTopIndex];
 
     for (let j = 0; j < diceArr[i].length; j++) {
-      if (diceArr[i][j] === topNum || diceArr[i][j] === bottomNum) {
-        continue;
-      } else {
-        numArr.push(diceArr[i][j]);
-      }
+      // if(diceArr[i][j] === topNum || )
     }
-
-    sum += Math.max(...numArr);
   }
-
-  caseOneMaxNum = sum;
 }
 
 bottomNum = numberOneMatchNum;
 
 if (bottomNum === numberOneMatchNum) {
   let topNum = minNum;
-  let sum = firstMaxNum;
-
-  for (let i = 0; i < N - 1; i++) {
-    let matchBottomIndex = diceArr[i].indexOf(topNum);
-    bottomNum = diceArr[i][matchBottomIndex];
-    let matchTopIndex = 0;
-    let numArr = [];
-
-    if (matchBottomIndex === 0) {
-      matchTopIndex = 5;
-    } else if (matchBottomIndex === 1) {
-      matchTopIndex = 3;
-    } else if (matchBottomIndex === 2) {
-      matchTopIndex = 4;
-    } else if (matchBottomIndex === 3) {
-      matchTopIndex = 1;
-    } else if (matchBottomIndex === 4) {
-      matchTopIndex = 2;
-    } else if (matchBottomIndex === 5) {
-      matchTopIndex = 0;
-    }
-
-    topNum = diceArr[i][matchTopIndex];
-
-    for (let j = 0; j < diceArr[i].length; j++) {
-      if (diceArr[i][j] === topNum || diceArr[i][j] === bottomNum) {
-        continue;
-      } else {
-        numArr.push(diceArr[i][j]);
-      }
-    }
-
-    sum += Math.max(...numArr);
-  }
-
-  caseTwoMaxNum = sum;
 }
 
 caseOneMaxNum >= caseTwoMaxNum
