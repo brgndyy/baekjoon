@@ -48,12 +48,72 @@ numberOneMatchNum = firstDice[numberOneMatchIndex];
 
 bottomNum = minNum;
 
+let nums = [];
+
+for (let i = 0; i < firstDice.length; i++) {
+  if (firstDice[i] === bottomNum || firstDice[i] === numberOneMatchNum) {
+    continue;
+  } else {
+    nums.push(firstDice[i]);
+  }
+}
+
+// 처음에 가장 큰 수 더해주기
+let firstMaxNum = Math.max(...nums);
+
+// 밑에 주사위 숫자가 1일때
 if (bottomNum === minNum) {
   let topNum = numberOneMatchNum;
-  let sum = 0;
+  let sum = firstMaxNum;
 
   for (let i = 0; i < N - 1; i++) {
     let matchBottomIndex = diceArr[i].indexOf(topNum);
+    bottomNum = diceArr[i][matchBottomIndex];
+    let matchTopIndex = 0;
+    let numArr = [];
+
+    if (matchBottomIndex === 0) {
+      matchTopIndex = 5;
+    } else if (matchBottomIndex === 1) {
+      matchTopIndex = 3;
+    } else if (matchBottomIndex === 2) {
+      matchTopIndex = 4;
+    } else if (matchBottomIndex === 3) {
+      matchTopIndex = 1;
+    } else if (matchBottomIndex === 4) {
+      matchTopIndex = 2;
+    } else if (matchBottomIndex === 5) {
+      matchTopIndex = 0;
+    }
+
+    topNum = diceArr[i][matchTopIndex];
+
+    // 주사위에서 가장 큰 수 넣어주기
+
+    for (let j = 0; j < diceArr[i].length; j++) {
+      if (diceArr[i][j] === topNum || diceArr[i][j] === bottomNum) {
+        continue;
+      } else {
+        numArr.push(diceArr[i][j]);
+      }
+    }
+
+    sum += Math.max(...numArr);
+  }
+
+  caseOneMaxNum = sum;
+}
+
+// 밑에 바닥 숫자 1이 아닌 1에 대응하는 숫자로 초기화
+bottomNum = numberOneMatchNum;
+
+if (bottomNum === numberOneMatchNum) {
+  let topNum = minNum;
+  let sum = firstMaxNum;
+
+  for (let i = 0; i < N - 1; i++) {
+    let matchBottomIndex = diceArr[i].indexOf(topNum);
+    bottomNum = diceArr[i][matchBottomIndex];
     let matchTopIndex = 0;
     let numArr = [];
 
@@ -74,15 +134,17 @@ if (bottomNum === minNum) {
     topNum = diceArr[i][matchTopIndex];
 
     for (let j = 0; j < diceArr[i].length; j++) {
-      // if(diceArr[i][j] === topNum || )
+      if (diceArr[i][j] === topNum || diceArr[i][j] === bottomNum) {
+        continue;
+      } else {
+        numArr.push(diceArr[i][j]);
+      }
     }
+
+    sum += Math.max(...numArr);
   }
-}
 
-bottomNum = numberOneMatchNum;
-
-if (bottomNum === numberOneMatchNum) {
-  let topNum = minNum;
+  caseTwoMaxNum = sum;
 }
 
 caseOneMaxNum >= caseTwoMaxNum

@@ -58,9 +58,10 @@ for (let i = 0; i < firstDice.length; i++) {
   }
 }
 
-let firstMaxNum = Math.min(...nums);
+// 처음에 가장 큰 수 더해주기
+let firstMaxNum = Math.max(...nums);
 
-// 0
+// 밑에 주사위 숫자가 1일때
 if (bottomNum === minNum) {
   let topNum = numberOneMatchNum;
   let sum = firstMaxNum;
@@ -87,6 +88,8 @@ if (bottomNum === minNum) {
 
     topNum = diceArr[i][matchTopIndex];
 
+    // 주사위에서 가장 큰 수 넣어주기
+
     for (let j = 0; j < diceArr[i].length; j++) {
       if (diceArr[i][j] === topNum || diceArr[i][j] === bottomNum) {
         continue;
@@ -101,6 +104,7 @@ if (bottomNum === minNum) {
   caseOneMaxNum = sum;
 }
 
+// 밑에 바닥 숫자 1이 아닌 1에 대응하는 숫자로 초기화
 bottomNum = numberOneMatchNum;
 
 if (bottomNum === numberOneMatchNum) {
