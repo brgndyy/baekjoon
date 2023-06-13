@@ -1,128 +1,62 @@
-const input = `5 4
-0 0 1 0 2
-2 3 2 1 0
-4 3 2 9 0
-1 0 2 9 0
-8 8 2 1 0
-1 3
-3 4
-8 1
-4 8`.split("\n");
+const input = `6 4 2
+1 2 3 4
+5 6 7 8
+9 1 6 3
+8 7 2 5
+7 5 4 1
+4 2 1 6`.split("\n");
 
-let [N, M] = input
-  .shift()
-  .split(" ")
-  .map((str) => Number(str));
+let [N, M, R] = input[0].split(" ").map((x) => parseInt(x));
+let arr = Array.from(Array(N), () => new Array(M).fill(0));
 
-let totalMap = [];
-let bibarigiPos = [
-  [N - 2, 0],
-  [N - 1, 0],
-  [N - 2, 1],
-  [N - 1, 1],
-];
+for (let i = 1; i <= N; i++) {
+  arr[i - 1] = input[i].split(" ").map((x) => parseInt(x));
+}
 
-let dir = [
-  [0, -1],
-  [-1, -1],
-  [-1, 0],
-  [-1, 1],
-  [0, 1],
-  [1, 1],
-  [1, 0],
-  [1, -1],
-];
+let min = Math.min(N, M);
+for (let a = 0; a < R; a++) {
+  let newArr = Array.from(Array(N), () => new Array(M).fill(0));
+  for (let b = 0; b < Math.floor(min / 2); b++) {
+    // 해당 링 행렬의 최댓값
+    let maxN = N - b - 1;
+    let maxM = M - b - 1;
+    // 서쪽 동쪽
+    let nn = b;
 
-let diagonalDir = [
-  [-1, -1],
-  [-1, 1],
-  [1, -1],
-  [1, 1],
-];
+    // 남쪽 북쪽
+    let mm = b;
+
+    // 맨왼쪽에서 남쪽방향으로
+    for (let c = 0; c < maxN - b; c++, nn++) {
+      newArr[nn + 1][mm] = arr[nn][mm];
+    }
+
+    // 맨 밑에서 동쪽 방향으로
+    for (let c = 0; c < maxM - b; c++, mm++) {
+      newArr[nn][mm + 1] = arr[nn][mm];
+    }
+
+    // 맨 오른쪽에서 북쪽 방향으로
+    for (let c = 0; c < maxN - b; c++, nn--) {
+      newArr[nn - 1][mm] = arr[nn][mm];
+    }
+
+    // 맨 위에서 서쪽 방향으로
+    for (let c = 0; c < maxM - b; c++, mm--) {
+      newArr[nn][mm - 1] = arr[nn][mm];
+    }
+  }
+  for (let i = 0; i < N; i++) {
+    for (let j = 0; j < M; j++) {
+      arr[i][j] = newArr[i][j];
+    }
+  }
+}
 
 for (let i = 0; i < N; i++) {
-  let arr = input
-    .shift()
-    .split(" ")
-    .map((str) => Number(str));
-
-  totalMap.push(arr);
+  let output = "";
+  for (let j = 0; j < M; j++) {
+    output += arr[i][j] + " ";
+  }
+  console.log(output.trim());
 }
-
-let cloudArr = [];
-
-for (let i = 0; i < bibarigiPos.length; i++) {
-  let [hPos, wPos] = bibarigiPos[i];
-
-  cloudArr.push([hPos, wPos]);
-}
-
-for (let i = 0; i < input.length; i++) {
-  let [di, si] = input[i].split(" ").map((str) => Number(str));
-
-  di -= 1;
-
-  for (let j = 0; j < si; j++) {
-    for (let k = 0; k < bibarigiPos.length; k++) {
-      let nx = bibarigiPos[k][0] + dir[di][0];
-      let ny = bibarigiPos[k][1] + dir[di][1];
-
-      if (nx < 0) {
-        nx = N - 1;
-      } else if (nx >= N) {
-        nx = 0;
-      }
-      if (ny < 0) {
-        ny = N - 1;
-      } else if (ny >= N) {
-        ny = 0;
-      }
-
-      bibarigiPos[k][0] = nx;
-      bibarigiPos[k][1] = ny;
-    }
-  }
-
-  for (let i = 0; i < bibarigiPos.length; i++) {
-    totalMap[bibarigiPos[i][0]][bibarigiPos[i][1]] += 1;
-  }
-
-  for (let j = 0; j < bibarigiPos.length; j++) {
-    let count = 0;
-
-    for (let k = 0; k < diagonalDir.length; k++) {
-      let nx = bibarigiPos[j][0] + diagonalDir[k][0];
-      let ny = bibarigiPos[j][1] + diagonalDir[k][1];
-
-      if (nx >= 0 && ny >= 0 && nx < N && ny < N && totalMap[nx][ny] !== 0) {
-        count++;
-      }
-    }
-
-    totalMap[bibarigiPos[j][0]][bibarigiPos[j][1]] += count;
-  }
-
-  let newBibarigiPos = [];
-
-  for (let m = 0; m < N; m++) {
-    for (let k = 0; k < N; k++) {
-      if (
-        totalMap[m][k] >= 2 &&
-        !bibarigiPos.some(([r, c]) => r === m && c === k)
-      ) {
-        totalMap[m][k] -= 2;
-        newBibarigiPos.push([m, k]);
-      }
-    }
-  }
-  bibarigiPos = newBibarigiPos;
-}
-
-let result = 0;
-for (let i = 0; i < N; i++) {
-  for (let j = 0; j < N; j++) {
-    result += totalMap[i][j];
-  }
-}
-
-console.log(result);

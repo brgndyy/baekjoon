@@ -1,58 +1,62 @@
-const input = `4 4 2
+const input = `6 4 2
 1 2 3 4
 5 6 7 8
-9 10 11 12
-13 14 15 16`.split("\n");
+9 1 6 3
+8 7 2 5
+7 5 4 1
+4 2 1 6`.split("\n");
 
 let [N, M, R] = input
   .shift()
   .split(" ")
   .map((str) => Number(str));
+let arr = input.map((str) => str.split(" ").map((str) => Number(str)));
 
-let arr = input.map((arr) => arr.split(" ").map((str) => Number(str)));
+let min = Math.min(N, M);
+let rotateNum = Math.floor(min / 2);
+for (let a = 0; a < R; a++) {
+  let newArr = Array.from(Array(N), () => new Array(M).fill(0));
+  for (let b = 0; b < rotateNum; b++) {
+    // 해당 링 행렬의 최댓값
+    let maxN = N - b - 1;
+    let maxM = M - b - 1;
+    // 서쪽 동쪽
+    let nn = b;
 
-function main() {
-  let answer = "";
+    // 남쪽 북쪽
+    let mm = b;
 
-  let ret = [...arr];
-  for (let i = 0; i < R; i++) {
-    ret = rotate(arr);
-    arr = [...ret];
-  }
-  ret.forEach((e) => {
-    answer += e.join(" ") + "\n";
-  });
-
-  return console.log(answer.trim());
-}
-function rotate(arr) {
-  let min = Math.min(N, M);
-
-  // 나눗셈으로 밀기.
-  // 각 모서리 시작점은 다른애가 채워줌.
-  let temp = new Array(N).fill(null).map((_) => new Array(M).fill(0));
-  for (let limit = 0; limit < Math.floor(min / 2); limit++) {
-    // 윗줄.
-    for (let j = M - 2 - limit; j >= 0 + limit; j--) {
-      temp[0 + limit][j] = arr[0 + limit][j + 1];
+    // 맨왼쪽에서 남쪽방향으로
+    for (let c = 0; c < maxN - b; c++, nn++) {
+      newArr[nn + 1][mm] = arr[nn][mm];
     }
-    // 왼쪽.
-    for (let j = 1 + limit; j < N - limit; j++) {
-      temp[j][0 + limit] = arr[j - 1][0 + limit];
+
+    // 맨 밑에서 동쪽 방향으로
+    for (let c = 0; c < maxM - b; c++, mm++) {
+      newArr[nn][mm + 1] = arr[nn][mm];
     }
-    // 아래
-    for (let j = 1 + limit; j < M - limit; j++) {
-      temp[N - 1 - limit][j] = arr[N - 1 - limit][j - 1];
+
+    // 맨 오른쪽에서 북쪽 방향으로
+    for (let c = 0; c < maxN - b; c++, nn--) {
+      newArr[nn - 1][mm] = arr[nn][mm];
     }
-    // 오른쪽.
-    for (let j = N - 2 - limit; j >= 0 + limit; j--) {
-      temp[j][M - 1 - limit] = arr[j + 1][M - 1 - limit];
+
+    // 맨 위에서 서쪽 방향으로
+    for (let c = 0; c < maxM - b; c++, mm--) {
+      newArr[nn][mm - 1] = arr[nn][mm];
     }
   }
-  // temp.forEach(e => {
-  //   console.log(e.join(' '))
-  // })
-
-  return temp;
+  for (let i = 0; i < N; i++) {
+    for (let j = 0; j < M; j++) {
+      arr[i][j] = newArr[i][j];
+    }
+  }
 }
-main();
+
+for (let i = 0; i < N; i++) {
+  let output = "";
+  for (let j = 0; j < M; j++) {
+    output += arr[i][j] + " ";
+  }
+  console.log(output.trim());
+}
