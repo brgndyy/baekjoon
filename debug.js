@@ -1,66 +1,84 @@
-const input = `3 2
-1 2 1 2 1 2`.split("\n");
+const input = `5 4
+0 0 1 0 2
+2 3 2 1 0
+4 3 2 9 0
+1 0 2 9 0
+8 8 2 1 0
+1 3
+3 4
+8 1
+4 8`.split("\n");
 
-let [N, K] = input
+let [N, M] = input
   .shift()
   .split(" ")
   .map((str) => Number(str));
 
-let arr = input
-  .shift()
-  .split(" ")
-  .map((str) => Number(str));
+let totalMap = [];
+let bibarigiPos = [
+  [N - 2, 0],
+  [N - 1, 0],
+  [N - 2, 1],
+  [N - 1, 1],
+];
 
-const getZeroCount = (arr) =>
-  arr.reduce((acc, cur) => (cur === 0 ? acc + 1 : acc), 0);
+let dir = [
+  [0, -1],
+  [-1, -1],
+  [-1, 0],
+  [-1, 1],
+  [0, 1],
+  [1, 1],
+  [1, 0],
+  [1, -1],
+];
 
-const rotate = (arr, robots) => {
-  const last = arr.pop();
-  arr.unshift(last);
+for (let i = 0; i < N; i++) {
+  let arr = input
+    .shift()
+    .split(" ")
+    .map((str) => Number(str));
 
-  robots.pop();
-  robots.unshift(false);
-};
+  totalMap.push(arr);
+}
 
-const moveRobots = (arr, robots, N) => {
-  for (let i = N - 2; i > -1; i--) {
-    if (!robots[i]) continue;
+let cloudArr = [];
 
-    if (!robots[i + 1] && arr[i + 1] > 0) {
-      robots[i + 1] = true;
-      robots[i] = false;
-      arr[i + 1] -= 1;
+for (let i = 0; i < bibarigiPos.length; i++) {
+  let [hPos, wPos] = [totalMap[bibarigiPos[i][0]], totalMap[bibarigiPos[i][1]]];
+
+  cloudArr.push([hPos, wPos]);
+}
+
+for (let i = 0; i < input.length; i++) {
+  let [di, si] = input[i].split(" ").map((str) => Number(str));
+
+  di -= 1;
+
+  for (let j = 0; j < si; j++) {
+    for (let k = 0; k < bibarigiPos.length; k++) {
+      let nx = bibarigiPos[k][0] + dir[di][0];
+      let ny = bibarigiPos[k][1] + dir[di][1];
+
+      if (nx < 0) {
+        nx = N - 1;
+      } else if (nx >= N) {
+        nx = 0;
+      }
+      if (ny < 0) {
+        ny = N - 1;
+      } else if (ny >= N) {
+        ny = 0;
+      }
+
+      bibarigiPos[k][0] = nx;
+      bibarigiPos[k][1] = ny;
     }
   }
-};
 
-const addRobot = (arr, robots) => {
-  if (arr[0] > 0) {
-    arr[0] -= 1;
-    robots[0] = true;
-  }
-};
+  // for(let i = 0; i < bibarigiPos.length; i++){
 
-const removeNthRobot = (robots, n) => {
-  robots[n] = false;
-};
+  // }
+}
 
-const solution = (N, K, arr) => {
-  const robots = new Array(N).fill(false);
-  let stage = 0;
-
-  while (getZeroCount(arr) < K) {
-    stage++;
-    rotate(arr, robots);
-    if (robots[N - 1]) removeNthRobot(robots, N - 1);
-
-    moveRobots(arr, robots, N);
-    if (robots[N - 1]) removeNthRobot(robots, N - 1);
-
-    addRobot(arr, robots);
-  }
-
-  return stage;
-};
-
-console.log(solution(N, K, arr));
+console.log(cloudArr);
