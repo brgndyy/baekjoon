@@ -33,6 +33,13 @@ let dir = [
   [1, -1],
 ];
 
+let diagonalDir = [
+  [-1, -1],
+  [-1, 1],
+  [1, -1],
+  [1, 1],
+];
+
 for (let i = 0; i < N; i++) {
   let arr = input
     .shift()
@@ -45,7 +52,7 @@ for (let i = 0; i < N; i++) {
 let cloudArr = [];
 
 for (let i = 0; i < bibarigiPos.length; i++) {
-  let [hPos, wPos] = [totalMap[bibarigiPos[i][0]], totalMap[bibarigiPos[i][1]]];
+  let [hPos, wPos] = bibarigiPos[i];
 
   cloudArr.push([hPos, wPos]);
 }
@@ -76,9 +83,46 @@ for (let i = 0; i < input.length; i++) {
     }
   }
 
-  // for(let i = 0; i < bibarigiPos.length; i++){
+  for (let i = 0; i < bibarigiPos.length; i++) {
+    totalMap[bibarigiPos[i][0]][bibarigiPos[i][1]] += 1;
+  }
 
-  // }
+  for (let j = 0; j < bibarigiPos.length; j++) {
+    let count = 0;
+
+    for (let k = 0; k < diagonalDir.length; k++) {
+      let nx = bibarigiPos[j][0] + diagonalDir[k][0];
+      let ny = bibarigiPos[j][1] + diagonalDir[k][1];
+
+      if (nx >= 0 && ny >= 0 && nx < N && ny < N && totalMap[nx][ny] !== 0) {
+        count++;
+      }
+    }
+
+    totalMap[bibarigiPos[j][0]][bibarigiPos[j][1]] += count;
+  }
+
+  let newBibarigiPos = [];
+
+  for (let m = 0; m < N; m++) {
+    for (let k = 0; k < N; k++) {
+      if (
+        totalMap[m][k] >= 2 &&
+        !bibarigiPos.some(([r, c]) => r === m && c === k)
+      ) {
+        totalMap[m][k] -= 2;
+        newBibarigiPos.push([m, k]);
+      }
+    }
+  }
+  bibarigiPos = newBibarigiPos;
 }
 
-console.log(cloudArr);
+let result = 0;
+for (let i = 0; i < N; i++) {
+  for (let j = 0; j < N; j++) {
+    result += totalMap[i][j];
+  }
+}
+
+console.log(result);
