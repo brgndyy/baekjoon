@@ -1,56 +1,66 @@
-const input = `11 10
-7 4 0
-1 1 1 1 1 1 1 1 1 1
-1 0 0 0 0 0 0 0 0 1
-1 0 0 0 1 1 1 1 0 1
-1 0 0 1 1 0 0 0 0 1
-1 0 1 1 0 0 0 0 0 1
-1 0 0 0 0 0 0 0 0 1
-1 0 0 0 0 0 0 1 0 1
-1 0 0 0 0 0 1 1 0 1
-1 0 0 0 0 0 1 1 0 1
-1 0 0 0 0 0 0 0 0 1
-1 1 1 1 1 1 1 1 1 1`.split("\n");
+const input = `3 3
+1 1 0
+1 1 1
+1 0 1
+1 1 1`.split("\n");
 
-let [N, M] = input.shift().split(" ").map(Number);
-let [r, c, d] = input.shift().split(" ").map(Number);
-
-let roomArr = input.map((row) => row.split(" ").map(Number));
+let [N, M] = input
+  .shift()
+  .split(" ")
+  .map((str) => Number(str));
+let [r, c, d] = input
+  .shift()
+  .split(" ")
+  .map((str) => Number(str));
+let board = input.map((str) => str.split(" ").map((str) => Number(str)));
 
 let count = 0;
-let answer = 1;
 
-roomArr[r][c] = 2;
-
-const dx = [-1, 0, 1, 0];
-const dy = [0, 1, 0, -1];
+let dir = [
+  [-1, 0],
+  [0, 1],
+  [1, 0],
+  [0, -1],
+];
 
 while (true) {
-  if (count === 4) {
-    let back = (d + 2) % 4;
-    let nx = r + dx[back];
-    let ny = c + dy[back];
-    if (roomArr[nx][ny] === 1) {
-      break;
-    }
-    r = nx;
-    c = ny;
-    count = 0;
-  }
+  let isClean = false;
 
-  d = (d + 3) % 4;
-  let nx = r + dx[d];
-  let ny = c + dy[d];
-
-  if (roomArr[nx][ny] === 0) {
-    r = nx;
-    c = ny;
-    roomArr[r][c] = 2;
-    answer++;
-    count = 0;
-  } else {
+  if (board[r][c] === 0) {
+    board[r][c] = 2; // 청소한 위치는 2로 변경
     count++;
   }
-}
 
-console.log(answer);
+  for (let i = 0; i < 4; i++) {
+    d = (d + 3) % 4; // 왼쪽 방향으로 회전
+    let nx = r + dir[d][0];
+    let ny = c + dir[d][1];
+
+    if (nx >= 0 && ny >= 0 && nx < N && ny < M) {
+      if (board[nx][ny] === 0) {
+        // 청소하지 않은 칸이 있다면 전진
+        r = nx;
+        c = ny;
+        isClean = true;
+        break;
+      }
+    }
+  }
+
+  if (!isClean) {
+    // 청소할 칸이 없다면 후진 시도
+    let nd = (d + 2) % 4; // 후진하는 방향
+    let nx = r + dir[nd][0];
+    let ny = c + dir[nd][1];
+
+    if (board[nx][ny] === 1) {
+      // 후진할 칸이 벽이라면 종료
+      break;
+    } else {
+      // 후진 가능
+      r = nx;
+      c = ny;
+    }
+  }
+}
+console.log(count);
