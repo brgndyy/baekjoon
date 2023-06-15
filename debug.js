@@ -1,42 +1,66 @@
-const input = `48 2 5 35`;
+const input = `11 10
+7 4 0
+1 1 1 1 1 1 1 1 1 1
+1 0 0 0 0 0 0 0 0 1
+1 0 0 0 1 1 1 1 0 1
+1 0 0 1 1 0 0 0 0 1
+1 0 1 1 0 0 0 0 0 1
+1 0 0 0 0 0 0 0 0 1
+1 0 0 0 0 0 0 1 0 1
+1 0 0 0 0 0 1 1 0 1
+1 0 0 0 0 0 1 1 0 1
+1 0 0 0 0 0 0 0 0 1
+1 1 1 1 1 1 1 1 1 1`.split("\n");
 
-let [N, K, P, X] = input.split(" ").map((str) => parseInt(str));
+let [N, M] = input
+  .shift()
+  .split(" ")
+  .map((str) => Number(str));
 
-let numLights = {
-  0: [1, 1, 1, 0, 1, 1, 1],
-  1: [0, 0, 1, 0, 0, 1, 0],
-  2: [1, 0, 1, 1, 1, 0, 1],
-  3: [1, 0, 1, 1, 0, 1, 1],
-  4: [0, 1, 1, 1, 0, 1, 0],
-  5: [1, 1, 0, 1, 0, 1, 1],
-  6: [1, 1, 0, 1, 1, 1, 1],
-  7: [1, 0, 1, 0, 0, 1, 0],
-  8: [1, 1, 1, 1, 1, 1, 1],
-  9: [1, 1, 1, 1, 0, 1, 1],
-};
+let [r, c, d] = input
+  .shift()
+  .split(" ")
+  .map((str) => Number(str));
 
-let splitX = X.toString().split("");
-
+let board = input.map((str) => str.split(" ").map((str) => Number(str)));
 let count = 0;
 
-for (let i = 1; i <= N; i++) {
-  let strI = i.toString().padStart(K, "0");
+let dir = [
+  [-1, 0],
+  [0, 1],
+  [1, 0],
+  [0, -1],
+];
 
-  if (i === X) {
-    continue;
-  } else {
-    let changeCount = 0;
-    for (let j = 0; j < K; j++) {
-      let numArr = numLights[strI[j]];
-      let XArr = numLights[splitX[j]];
-      for (let k = 0; k < 7; k++) {
-        if (numArr[k] !== XArr[k]) {
-          changeCount++;
-        }
-      }
-    }
-    if (changeCount <= P) {
+board[r][c] = 2;
+count++;
+let isClean = false;
+
+while (true) {
+  for (let i = 0; i < 4; i++) {
+    let nx = r + dir[d][0];
+    let ny = c + dir[d][1];
+
+    if (nx >= 0 && ny >= 0 && nx < N && ny < M && board[nx][ny] === 0) {
+      r = nx;
+      c = ny;
+      board[r][c] = 2;
       count++;
+      isClean = true;
+      break;
+    } else if (nx < 0 || ny < 0 || nx <= N || ny <= M || board[nx][ny] !== 1) {
+      d = (d + 3) % 4;
+    }
+  }
+
+  if (isClean === false) {
+    d = Math.abs(d - 2);
+
+    let nx = r + dir[d][0];
+    let ny = c + dir[d][1];
+
+    if (nx < 0 || ny < 0 || nx >= N || ny >= M || board[nx][ny] === 1) {
+      break;
     }
   }
 }
