@@ -1,68 +1,42 @@
-const input = `11 10
-7 4 0
-1 1 1 1 1 1 1 1 1 1
-1 0 0 0 0 0 0 0 0 1
-1 0 0 0 1 1 1 1 0 1
-1 0 0 1 1 0 0 0 0 1
-1 0 1 1 0 0 0 0 0 1
-1 0 0 0 0 0 0 0 0 1
-1 0 0 0 0 0 0 1 0 1
-1 0 0 0 0 0 1 1 0 1
-1 0 0 0 0 0 1 1 0 1
-1 0 0 0 0 0 0 0 0 1
-1 1 1 1 1 1 1 1 1 1`.split("\n");
-
-let [N, M] = input
-  .shift()
-  .split(" ")
-  .map((str) => Number(str));
-
-let [r, c, d] = input
-  .shift()
-  .split(" ")
-  .map((str) => Number(str));
-
-let board = input.map((str) => str.split(" ").map((str) => Number(str)));
-let count = 0;
-
-let dir = [
-  [-1, 0],
-  [0, 1],
-  [1, 0],
-  [0, -1],
+const places = [
+  ["POOOP", "OXXOX", "OPXPX", "OXXOX", "OPXXP"],
+  ["POOPX", "OXPXP", "PXXXO", "OXXXO", "OOOPP"],
+  ["PXOPX", "OXOXP", "OXPOX", "OXXOP", "PXPOX"],
+  ["OOOXX", "XOOOX", "OOOXX", "OXOOX", "OOOOO"],
+  ["PXPXP", "XPXPX", "PXPXP", "XPXPX", "PXPXP"],
 ];
 
-board[r][c] = 2;
-count++;
-let isClean = false;
+let result = [];
 
-while (true) {
-  for (let i = 0; i < 4; i++) {
-    let nx = r + dir[d][0];
-    let ny = c + dir[d][1];
+let N = 5;
+let M = 5;
+let flag = false;
 
-    if (nx >= 0 && ny >= 0 && nx < N && ny < M && board[nx][ny] === 0) {
-      r = nx;
-      c = ny;
-      board[r][c] = 2;
-      count++;
-      isClean = true;
-      break;
-    } else if (nx < 0 || ny < 0 || nx <= N || ny <= M || board[nx][ny] !== 1) {
-      d = (d + 3) % 4;
+for (let i = 0; i < N; i++) {
+  let placeArr = places[i].map((str) => str.split(""));
+  let seatPos = [];
+
+  for (let j = 0; j < N; j++) {
+    for (let k = 0; k < M; k++) {
+      if (placeArr[j][k] === "P") {
+        flag = true;
+        seatPos.push([j, k]);
+      }
     }
   }
 
-  if (isClean === false) {
-    d = Math.abs(d - 2);
-
-    let nx = r + dir[d][0];
-    let ny = c + dir[d][1];
-
-    if (nx < 0 || ny < 0 || nx >= N || ny >= M || board[nx][ny] === 1) {
-      break;
+  for (let i = 0; i < seatPos.length; i++) {
+    for (let j = i + 1; j < seatPos.length; j++) {
+      if (
+        Math.abs(seatPos[i][0] - seatPos[j][0]) +
+          Math.abs(seatPos[i][1] - seatPos[j][1]) <=
+        2
+      ) {
+      }
     }
+  }
+
+  if (flag === false) {
+    result.push(1);
   }
 }
-
-console.log(count);
