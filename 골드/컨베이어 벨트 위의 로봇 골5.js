@@ -1,73 +1,48 @@
-const input = `3 2
-1 2 1 2 1 2`.split("\n");
+const input = `5 8
+100 99 60 80 30 20 10 89 99 100`.split("\n");
 
-let [N, K] = input
-  .shift()
-  .split(" ")
-  .map((str) => Number(str));
+let [N, K] = input.shift().split(" ").map(Number);
+let arr = input.shift().split(" ").map(Number);
+let stage = 0;
 
-let arr = input
-  .shift()
-  .split(" ")
-  .map((str) => Number(str));
+function solution(N, K, arr) {
+  let robots = Array(arr.length).fill(false);
+  let count = 0;
 
-// 배열에서 0의 개수를 세는 함수
-const getZeroCount = (arr) =>
-  arr.reduce((acc, cur) => (cur === 0 ? acc + 1 : acc), 0);
+  while (count < K) {
+    // Step 1
+    stage++;
+    arr.unshift(arr.pop());
+    robots.unshift(robots.pop());
+    // 내리는 위치에 도달한 로봇을 없애기
+    if (robots[N - 1]) {
+      robots[N - 1] = false;
+    }
 
-// 배열을 회전 시키는 함수
-const rotate = (arr, robots) => {
-  const last = arr.pop();
-  arr.unshift(last);
+    // Step 2
+    for (let i = N - 1; i > 0; i--) {
+      if (!robots[i] && robots[i - 1] && arr[i] > 0) {
+        robots[i - 1] = false;
+        arr[i]--;
+        if (arr[i] === 0) {
+          count++;
+        }
+        if (i !== N - 1) {
+          robots[i] = true;
+        }
+      }
+    }
 
-  robots.pop();
-  robots.unshift(false);
-};
-
-// 로봇이 이동할수 있는지 판단하고 이동시키는 함수
-// 다음 위치에 로봇이 없고 벨트 내구도가 1이상일때만 가능
-const moveRobots = (arr, robots, N) => {
-  for (let i = N - 2; i > -1; i--) {
-    if (!robots[i]) continue;
-
-    if (!robots[i + 1] && arr[i + 1] > 0) {
-      robots[i + 1] = true;
-      robots[i] = false;
-      arr[i + 1] -= 1;
+    // Step 3
+    if (arr[0] !== 0) {
+      arr[0]--;
+      if (arr[0] === 0) {
+        count++;
+      }
+      robots[0] = true;
     }
   }
-};
-
-// 첫번째 위치에 로봇을 추가하는 함수
-// 벨트 내구도가 0이 아니어야 가능
-const addRobot = (arr, robots) => {
-  if (arr[0] > 0) {
-    arr[0] -= 1;
-    robots[0] = true;
-  }
-};
-
-// n번째 위치의 로봇을 제거하는 함수
-const removeNthRobot = (robots, n) => {
-  robots[n] = false;
-};
-
-const solution = (N, K, arr) => {
-  const robots = new Array(N).fill(false);
-  let stage = 0;
-
-  while (getZeroCount(arr) < K) {
-    stage++;
-    rotate(arr, robots);
-    if (robots[N - 1]) removeNthRobot(robots, N - 1);
-
-    moveRobots(arr, robots, N);
-    if (robots[N - 1]) removeNthRobot(robots, N - 1);
-
-    addRobot(arr, robots);
-  }
-
   return stage;
-};
+}
 
 console.log(solution(N, K, arr));
