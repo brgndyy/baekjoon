@@ -1,159 +1,69 @@
-const input = `3 3 0 0 16
-0 1 2
-3 4 5
-6 7 8
-4 4 1 1 3 3 2 2 4 4 1 1 3 3 2 2`.split("\n");
+const fs = require("fs");
+const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
 
 function solution(input) {
-  let [N, M, x, y, K] = input
-    .shift()
-    .split(" ")
-    .map((str) => Number(str));
-  let board = [];
-  let startPos = [x, y];
-  // 맨윗면, 동쪽, 남쪽, 서쪽, 북쪽, 맨밑면
-  let dice = [0, 0, 0, 0, 0, 0];
-  let answer = [];
-
-  let dir = {
-    1: [0, 1],
-    2: [0, -1],
-    3: [-1, 0],
-    4: [1, 0],
-  };
-
-  for (let i = 0; i < N; i++) {
-    let arr = input
-      .shift()
-      .split(" ")
-      .map((str) => Number(str));
-    board.push(arr);
-  }
-
-  let orderArr = input
+  let [N, M, R] = input
     .shift()
     .split(" ")
     .map((str) => Number(str));
 
-  ///--------
+  let board = input.map((str) => str.split(" ").map((str) => Number(str)));
 
-  for (let i = 0; i < K; i++) {
-    if (orderArr[i] === 1) {
-      let nx = startPos[0] + dir[1][0];
-      let ny = startPos[1] + dir[1][1];
+  // 6 x 8 배열일때  3번, 6 x 6 배열일때도 3번, N과 M중에 가장 작은수를 2번으로 나눈 수만큼 회전수가 정해짐
 
-      // 범위 벗어나면 무시
-      if (nx < 0 || ny < 0 || nx >= N || ny >= M) {
-        continue;
-      } else {
-        let boardNum = board[nx][ny];
+  let rotateNum = Math.min(N, M) / 2;
+  let minusNum = 0;
 
-        tmp = dice[0];
-        dice[0] = dice[3];
-        dice[3] = dice[5];
-        dice[5] = dice[1];
-        dice[1] = tmp;
-
-        if (boardNum === 0) {
-          board[nx][ny] = dice[5];
-          dice[5] = 0;
-        } else if (boardNum !== 0) {
-          dice[5] = boardNum;
-          board[nx][ny] = 0;
-        }
-
-        startPos = [nx, ny];
-      }
-      answer.push(dice[0]);
+  for (let j = 0; j < R; j++) {
+    for (let i = 0; i < rotateNum; i++) {
+      let num = i;
+      rotate(num, minusNum);
+      minusNum++;
     }
-    // 서쪽일때
-    else if (orderArr[i] === 2) {
-      let nx = startPos[0] + dir[2][0];
-      let ny = startPos[1] + dir[2][1];
-
-      // 범위 벗어나면 무시
-      if (nx < 0 || ny < 0 || nx >= N || ny >= M) {
-        continue;
-      } else {
-        let boardNum = board[nx][ny];
-
-        tmp = dice[0];
-        dice[0] = dice[1];
-        dice[1] = dice[5];
-        dice[5] = dice[3];
-        dice[3] = tmp;
-
-        if (boardNum === 0) {
-          board[nx][ny] = dice[5];
-          dice[5] = 0;
-        } else if (boardNum !== 0) {
-          dice[5] = boardNum;
-          board[nx][ny] = 0;
-        }
-
-        startPos = [nx, ny];
-        answer.push(dice[0]);
-      }
-    }
-    // 북쪽일때
-    else if (orderArr[i] === 3) {
-      let nx = startPos[0] + dir[3][0];
-      let ny = startPos[1] + dir[3][1];
-
-      // 범위 벗어나면 무시
-      if (nx < 0 || ny < 0 || nx >= N || ny >= M) {
-        continue;
-      } else {
-        let boardNum = board[nx][ny];
-
-        tmp = dice[0];
-        dice[0] = dice[4];
-        dice[4] = dice[5];
-        dice[5] = dice[2];
-        dice[2] = tmp;
-
-        if (boardNum === 0) {
-          board[nx][ny] = dice[5];
-          dice[5] = 0;
-        } else if (boardNum !== 0) {
-          dice[5] = boardNum;
-          board[nx][ny] = 0;
-        }
-
-        startPos = [nx, ny];
-        answer.push(dice[0]);
-      }
-    } else if (orderArr[i] === 4) {
-      let nx = startPos[0] + dir[4][0];
-      let ny = startPos[1] + dir[4][1];
-
-      // 범위 벗어나면 무시
-      if (nx < 0 || ny < 0 || nx >= N || ny >= M) {
-        continue;
-      } else {
-        let boardNum = board[nx][ny];
-
-        let tmp = dice[0];
-        dice[0] = dice[2];
-        dice[2] = dice[5];
-        dice[5] = dice[4];
-        dice[4] = tmp;
-
-        if (boardNum === 0) {
-          board[nx][ny] = dice[5];
-          dice[5] = 0;
-        } else if (boardNum !== 0) {
-          dice[5] = boardNum;
-          board[nx][ny] = 0;
-        }
-
-        startPos = [nx, ny];
-        answer.push(dice[0]);
-      }
-    }
+    minusNum = 0;
   }
 
-  return answer.join("\n");
+  function rotate(num, minusNum) {
+    let startX = num; // 0
+    let endX = N - 1 - minusNum; // 3
+
+    let startY = num; // 0
+    let endY = M - 1 - minusNum; // 3
+
+    let temp = board[startX][startY];
+
+    // 맨윗줄라인을 서쪽방향으로 옮기기
+
+    for (let i = startY; i <= endY - 1; i++) {
+      board[startX][i] = board[startX][i + 1];
+    }
+
+    // 동쪽라인을 북쪽방향으로 옮기기
+
+    for (let j = startX; j <= endX - 1; j++) {
+      board[j][endY] = board[j + 1][endY];
+    }
+
+    // 맨밑쪽라인을 동쪽방향으로 옮기기
+
+    for (let k = endY; k > startY; k--) {
+      board[endX][k] = board[endX][k - 1];
+    }
+
+    // 서쪽라인을 밑으로 내리기
+
+    for (let m = endX; m > startX; m--) {
+      board[m][startY] = board[m - 1][startY];
+    }
+
+    board[num + 1][num] = temp;
+  }
+
+  let answer = "";
+
+  board.map((arr) => (answer += arr.join(" ") + "\n"));
+
+  return answer.trim();
 }
 
 console.log(solution(input));

@@ -1,62 +1,69 @@
-const input = `6 4 2
-1 2 3 4
-5 6 7 8
-9 1 6 3
-8 7 2 5
-7 5 4 1
-4 2 1 6`.split("\n");
+const fs = require("fs");
+const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
 
-let [N, M, R] = input
-  .shift()
-  .split(" ")
-  .map((str) => Number(str));
-let arr = input.map((str) => str.split(" ").map((str) => Number(str)));
+function solution(input) {
+  let [N, M, R] = input
+    .shift()
+    .split(" ")
+    .map((str) => Number(str));
 
-let min = Math.min(N, M);
-let rotateNum = Math.floor(min / 2);
-for (let a = 0; a < R; a++) {
-  let newArr = Array.from(Array(N), () => new Array(M).fill(0));
-  for (let b = 0; b < rotateNum; b++) {
-    // 해당 링 행렬의 최댓값
-    let maxN = N - b - 1;
-    let maxM = M - b - 1;
-    // 서쪽 동쪽
-    let nn = b;
+  let board = input.map((str) => str.split(" ").map((str) => Number(str)));
 
-    // 남쪽 북쪽
-    let mm = b;
+  // 6 x 8 배열일때  3번, 6 x 6 배열일때도 3번, N과 M중에 가장 작은수를 2번으로 나눈 수만큼 회전수가 정해짐
 
-    // 맨왼쪽에서 남쪽방향으로
-    for (let c = 0; c < maxN - b; c++, nn++) {
-      newArr[nn + 1][mm] = arr[nn][mm];
+  let rotateNum = Math.min(N, M) / 2;
+  let minusNum = 0;
+
+  for (let j = 0; j < R; j++) {
+    for (let i = 0; i < rotateNum; i++) {
+      let num = i;
+      rotate(num, minusNum);
+      minusNum++;
     }
-
-    // 맨 밑에서 동쪽 방향으로
-    for (let c = 0; c < maxM - b; c++, mm++) {
-      newArr[nn][mm + 1] = arr[nn][mm];
-    }
-
-    // 맨 오른쪽에서 북쪽 방향으로
-    for (let c = 0; c < maxN - b; c++, nn--) {
-      newArr[nn - 1][mm] = arr[nn][mm];
-    }
-
-    // 맨 위에서 서쪽 방향으로
-    for (let c = 0; c < maxM - b; c++, mm--) {
-      newArr[nn][mm - 1] = arr[nn][mm];
-    }
+    minusNum = 0;
   }
-  for (let i = 0; i < N; i++) {
-    for (let j = 0; j < M; j++) {
-      arr[i][j] = newArr[i][j];
+
+  function rotate(num, minusNum) {
+    let startX = num; // 0
+    let endX = N - 1 - minusNum; // 3
+
+    let startY = num; // 0
+    let endY = M - 1 - minusNum; // 3
+
+    let temp = board[startX][startY];
+
+    // 맨윗줄라인을 서쪽방향으로 옮기기
+
+    for (let i = startY; i <= endY - 1; i++) {
+      board[startX][i] = board[startX][i + 1];
     }
+
+    // 동쪽라인을 북쪽방향으로 옮기기
+
+    for (let j = startX; j <= endX - 1; j++) {
+      board[j][endY] = board[j + 1][endY];
+    }
+
+    // 맨밑쪽라인을 동쪽방향으로 옮기기
+
+    for (let k = endY; k > startY; k--) {
+      board[endX][k] = board[endX][k - 1];
+    }
+
+    // 서쪽라인을 밑으로 내리기
+
+    for (let m = endX; m > startX; m--) {
+      board[m][startY] = board[m - 1][startY];
+    }
+
+    board[num + 1][num] = temp;
   }
+
+  let answer = "";
+
+  board.map((arr) => (answer += arr.join(" ") + "\n"));
+
+  return answer.trim();
 }
 
-for (let i = 0; i < N; i++) {
-  let output = "";
-  for (let j = 0; j < M; j++) {
-    output += arr[i][j] + " ";
-  }
-  console.log(output.trim());
-}
+console.log(solution(input));
