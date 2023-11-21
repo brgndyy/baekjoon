@@ -37,7 +37,3 @@ function countByRange(arr, leftValue, rightValue) {
 
   return rightIndex - leftIndex;
 }
-
-console.log(countByRange(arr, 4, 4));
-
-console.log(countByRange(arr, -1, 3));
