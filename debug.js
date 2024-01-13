@@ -1,30 +1,24 @@
-const input = `5
-5 4 2 3 1`.split("\n");
+const fs = require("fs");
+const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
 
 const N = Number(input.shift());
 
-const studentArr = input[0].split(" ").map((str) => Number(str));
+const numArr = input[0]
+  .split(" ")
+  .map(Number)
+  .sort((a, b) => a - b);
 
-const 간식받는곳 = [0];
+let answer = 0;
 
-const 왼쪽대기열 = [];
+for (let i = 0; i < N; i++) {
+  let memoizedSum = 0;
 
-while (studentArr.length) {
-  const studentNumber = studentArr.shift();
-
-  if (간식받는곳[간식받는곳.length - 1] + 1 === studentNumber) {
-    간식받는곳.push(studentNumber);
-  } else {
-    왼쪽대기열.push(studentNumber);
+  for (let j = i - 1; j >= 0; j--) {
+    memoizedSum += numArr[j];
   }
+
+  answer += memoizedSum;
+  answer += numArr[i];
 }
 
-for (let i = 왼쪽대기열.length - 1; i >= 0; i--) {
-  const studentNumber = 왼쪽대기열[i];
-
-  if (간식받는곳[간식받는곳.length - 1] + 1 === studentNumber) {
-    간식받는곳.push(studentNumber);
-  }
-}
-
-console.log(간식받는곳.length - 1 === N ? "Nice" : "Sad");
+console.log(answer);
