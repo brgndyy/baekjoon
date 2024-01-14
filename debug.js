@@ -1,20 +1,23 @@
-const input = `55-50+40`;
+const fs = require("fs");
+const input = fs.readFileSync("/dev/stdin").toString().trim();
 
-const splitedMinusInput = input.split("-");
+let N = Number(input);
 
 let answer = 0;
 
-for (let i = 0; i < splitedMinusInput.length; i++) {
-  const sum = splitedMinusInput[i]
-    .split("+")
-    .map(Number)
-    .reduce((a, b) => a + b, 0);
-
-  if (i === 0) {
-    answer += sum;
-  } else {
-    answer -= sum;
+while (N > 0) {
+  if (N % 5 === 0) {
+    answer += N / 5;
+    N = N - (N / 5) * 5;
   }
+
+  if (N <= 0) {
+    break;
+  }
+
+  N -= 3;
+
+  answer++;
 }
 
-console.log(answer);
+console.log(N < 0 ? -1 : answer);
