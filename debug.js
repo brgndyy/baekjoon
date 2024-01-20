@@ -1,44 +1,35 @@
-const fs = require("fs");
-const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
+const input = `15 5`.split(" ").map(Number);
 
-const N = Number(input[0]);
+let [ball, team] = input;
 
-let numArr = [];
+const basketArr = Array(team).fill(1);
 
-let answer = [];
+let index = 0;
 
-for (let i = 1; i <= N; i++) {
-  numArr.push(Number(input[i]));
-}
+ball -= team;
 
-function makeFibonacciArr(number) {
-  const fib = [0, 1];
-
-  while (fib[fib.length - 1] < number) {
-    const sum = fib[fib.length - 1] + fib[fib.length - 2];
-
-    fib.push(sum);
+while (ball > 0) {
+  if (index >= basketArr.length) {
+    index = 0;
   }
 
-  return fib;
-}
-
-for (let j = 0; j < N; j++) {
-  let number = numArr[j];
-  let arr = [];
-
-  const fibonacciArr = makeFibonacciArr(number);
-  let fibIndex = fibonacciArr.length - 1;
-
-  while (number > 0) {
-    if (number - fibonacciArr[fibIndex] >= 0) {
-      arr.push(fibonacciArr[fibIndex]);
-      number -= fibonacciArr[fibIndex];
-    }
-    fibIndex--;
+  if (ball - 1 > 0) {
+    ball = ball - 1;
+  } else {
+    ball -= 1;
   }
 
-  answer.push(arr);
+  basketArr[index] += ball;
+
+  index++;
 }
 
-answer.forEach((answer) => console.log(answer.sort((a, b) => a - b).join(" ")));
+console.log(basketArr);
+
+// if (new Set([...basketArr]).size !== basketArr.length) {
+//   console.log(-1);
+// } else {
+//   basketArr.sort((a, b) => b - a);
+
+//   console.log(basketArr[0] - basketArr[basketArr.length - 1]);
+// }
