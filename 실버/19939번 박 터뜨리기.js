@@ -1,4 +1,10 @@
-const input = `17 5`.split(" ").map(Number);
+const fs = require("fs");
+const input = fs
+  .readFileSync("/dev/stdin")
+  .toString()
+  .trim()
+  .split(" ")
+  .map(Number);
 
 const [ball, team] = input;
 
@@ -11,7 +17,7 @@ for (let i = 1; i <= team; i++) {
 if (sum > ball) {
   console.log(-1);
 } else {
-  if (sum % team === 0) {
+  if (ball % sum === 0) {
     console.log(team - 1);
   } else {
     console.log(team);
