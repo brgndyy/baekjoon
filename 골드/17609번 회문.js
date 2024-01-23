@@ -13,6 +13,14 @@ function isPalindrome(string) {
   const splittedString = string.split("");
 }
 
+function isAlikePalindrome(string) {
+  for (let i = 0; i <= Math.floor(string.length / 2); i++) {
+    // 맨 끝 문자가 서로 달라진다면
+    if (string[i] !== string[string.length - 1 - i]) {
+    }
+  }
+}
+
 for (let i = 0; i < N; i++) {
   if (isPalindrome(input[i])) {
     console.log(0);
