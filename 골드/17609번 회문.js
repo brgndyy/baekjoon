@@ -1,6 +1,6 @@
 const input = `7
-abba
 summuus
+abba
 xabba
 xabbay
 comcom
@@ -10,13 +10,24 @@ comwwtmoc`.split("\n");
 const N = Number(input.shift());
 
 function isPalindrome(string) {
-  const splittedString = string.split("");
+  return string === string.split("").reverse().join("");
 }
 
 function isAlikePalindrome(string) {
-  for (let i = 0; i <= Math.floor(string.length / 2); i++) {
+  const splittedString = string.split("");
+
+  for (let i = 0; i <= Math.floor(splittedString.length / 2); i++) {
     // 맨 끝 문자가 서로 달라진다면
-    if (string[i] !== string[string.length - 1 - i]) {
+    if (splittedString[i] !== splittedString[splittedString.length - 1 - i]) {
+      const firstSplitted = isPalindrome(splittedString.slice(i, 1));
+      const lastSplitted = isPalindrome(
+        splittedString.slice(splittedString.length - 1, 1)
+      );
+
+      return firstSplitted || lastSplitted;
+    }
+    if (i === Math.floor(splittedString.length - 1 - i)) {
+      return isPalindrome(splittedString.slice(i, 1).join(""));
     }
   }
 }
