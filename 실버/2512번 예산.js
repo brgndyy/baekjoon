@@ -23,24 +23,29 @@ let start = arr[0];
 
 let end = arr[arr.length - 1];
 
-while (start < end) {
+while (start <= end) {
   let midValue = Math.floor((start + end) / 2); // 130
 
   let sum = 0;
 
   arr.forEach((num) => {
-    if (num >= midValue) {
+    if (num > midValue) {
       sum += midValue;
     } else {
       sum += num;
     }
   });
 
-  // 숫자 합이 M보다 크다면
-  if (sum > M) {
-    end = midValue;
-  } else if (sum <= M) {
-    answer = midValue;
+  // 예산이 합보다 크고
+  if (M >= sum) {
+    // 중간값이 정답보다 크다면
+    if (midValue > answer) {
+      // 그 중간값이 정답이다.
+      answer = midValue;
+    }
+    start = midValue + 1;
+  } else {
+    end = midValue - 1;
   }
 }
 
