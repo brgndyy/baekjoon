@@ -8,7 +8,7 @@ const [K, N] = input.shift().split(" ").map(Number);
 
 const arr = input.map(Number).sort((a, b) => a - b);
 
-let start = 0;
+let start = 1;
 
 let answer = 0;
 
@@ -23,11 +23,11 @@ while (start <= end) {
     sum += Math.floor(x / mid);
   }
 
-  if (N >= sum) {
-    start = mid + 1;
-  } else {
-    start = mid - 1;
+  if (sum >= N) {
     answer = mid;
+    end = mid - 1;
+  } else {
+    start = mid + 1;
   }
 }
 

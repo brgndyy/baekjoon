@@ -1,5 +1,5 @@
-const input = `4 7
-20 15 10 17`.split("\n");
+const input = `5 20
+4 42 40 26 46`.split("\n");
 
 const [N, target] = input.shift().split(" ").map(Number);
 
@@ -8,7 +8,9 @@ const arr = input[0]
   .map(Number)
   .sort((a, b) => a - b);
 
-let start = 1;
+let start = arr[0];
+
+let answer = 0;
 
 let end = arr[arr.length - 1];
 
@@ -18,16 +20,17 @@ while (start <= end) {
   let sum = 0;
 
   for (let x of arr) {
-    sum += x - mid;
+    if (x > mid) {
+      sum += x - mid;
+    }
   }
 
-  if (sum > target) {
-    end = mid - 1;
-  } else if (sum < target) {
+  // 나무를 더 많이 잘랐다면
+  if (sum >= target) {
     start = mid + 1;
-  } else if (sum === target) {
-    answer = sum;
-    break;
+    answer = mid;
+  } else {
+    end = mid - 1;
   }
 }
 
