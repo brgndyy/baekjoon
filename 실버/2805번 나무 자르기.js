@@ -10,8 +10,6 @@ const arr = input[0]
 
 let start = 1;
 
-let answer = 0;
-
 let end = arr[arr.length - 1];
 
 while (start <= end) {
@@ -24,9 +22,12 @@ while (start <= end) {
   }
 
   if (sum > target) {
-    end = mid + 1;
+    end = mid - 1;
   } else if (sum < target) {
-    start = mid - 1;
+    start = mid + 1;
+  } else if (sum === target) {
+    answer = sum;
+    break;
   }
 }
 
