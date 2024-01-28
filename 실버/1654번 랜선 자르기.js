@@ -1,8 +1,5 @@
-const input = `4 11
-802
-743
-457
-539`.split("\n");
+const fs = require("fs");
+const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
 
 const [K, N] = input.shift().split(" ").map(Number);
 
@@ -10,12 +7,12 @@ const arr = input.map(Number).sort((a, b) => a - b);
 
 let start = 1;
 
-let answer = 0;
-
 let end = arr[arr.length - 1];
 
+let answer = 0;
+
 while (start <= end) {
-  let mid = Math.floor((start + end) / 2);
+  const mid = Math.floor((start + end) / 2);
 
   let sum = 0;
 
@@ -23,10 +20,11 @@ while (start <= end) {
     sum += Math.floor(x / mid);
   }
 
-  if (sum >= N) {
-    answer = mid;
+  // 만든 랜선의 합이 더 짧다면
+  if (N > sum) {
     end = mid - 1;
   } else {
+    answer = mid;
     start = mid + 1;
   }
 }
