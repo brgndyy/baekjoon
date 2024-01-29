@@ -3,28 +3,30 @@ const input = `7
 
 const N = Number(input.shift());
 
-const nums = input[0].split(" ").map(Number).reverse();
+const numArr = input[0].split(" ").map(Number);
+
+numArr.reverse();
 
 let arr = [0];
 
-for (let x of nums) {
-  if (arr[arr.length - 1] < x) {
+for (let x of numArr) {
+  if (x > arr[arr.length - 1]) {
     arr.push(x);
   } else {
-    let left = 0;
-    let right = arr.length - 1;
+    let startIndex = 0;
+    let endIndex = arr.length - 1;
 
-    while (left < right) {
-      const mid = Math.floor((left + right) / 2);
+    while (startIndex < endIndex) {
+      const midIndex = Math.floor((startIndex + endIndex) / 2);
 
-      if (arr[mid] >= x) {
-        right = mid;
+      if (arr[midIndex] >= x) {
+        endIndex = midIndex;
       } else {
-        left = mid + 1;
+        startIndex = midIndex + 1;
       }
     }
 
-    arr[right] = x;
+    arr[endIndex] = x;
   }
 }
 
