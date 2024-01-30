@@ -1,5 +1,5 @@
-const input = `7
-15 11 4 8 5 2 4`.split("\n");
+const fs = require("fs");
+const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
 
 const N = Number(input.shift());
 
@@ -13,21 +13,24 @@ for (let x of numArr) {
   if (x > arr[arr.length - 1]) {
     arr.push(x);
   } else {
-    let startIndex = 0;
-    let endIndex = arr.length - 1;
-
-    while (startIndex < endIndex) {
-      const midIndex = Math.floor((startIndex + endIndex) / 2);
-
-      if (arr[midIndex] >= x) {
-        endIndex = midIndex;
-      } else {
-        startIndex = midIndex + 1;
-      }
-    }
+    const endIndex = findFirstGreaterOrEqualIndex(arr, x, 0, arr.length - 1);
 
     arr[endIndex] = x;
   }
 }
 
-console.log(arr);
+function findFirstGreaterOrEqualIndex(arr, target, startIndex, endIndex) {
+  while (startIndex < endIndex) {
+    const midIndex = Math.floor((startIndex + endIndex) / 2);
+
+    if (arr[midIndex] >= target) {
+      endIndex = midIndex;
+    } else {
+      startIndex = midIndex + 1;
+    }
+  }
+
+  return endIndex;
+}
+
+console.log(numArr.length - arr.length + 1);

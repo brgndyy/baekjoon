@@ -1,18 +1,36 @@
-const input = `3
-7`.split("\n");
+const fs = require("fs");
+const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
 
-const [N, K] = input.map(Number);
+const N = Number(input.shift());
 
-const arr = Array.from({ length: N }, (_, index) =>
-  Array.from({ length: N }, (_, indextwo) => (index + 1) * (indextwo + 1))
-);
+const numArr = input[0].split(" ").map(Number);
 
-let totalArr = [];
+numArr.reverse();
 
-arr.forEach((arr) => {
-  totalArr.push(...arr);
-});
+let arr = [0];
 
-totalArr.sort((a, b) => a - b);
+for (let x of numArr) {
+  if (x > arr[arr.length - 1]) {
+    arr.push(x);
+  } else {
+    const endIndex = findFirstGreaterOrEqualIndex(arr, x, 0, arr.length - 1);
 
-console.log(totalArr[K - 1]);
+    arr[endIndex] = x;
+  }
+}
+
+function findFirstGreaterOrEqualIndex(arr, target, startIndex, endIndex) {
+  while (startIndex < endIndex) {
+    const midIndex = Math.floor((startIndex + endIndex) / 2);
+
+    if (arr[midIndex] >= target) {
+      endIndex = midIndex;
+    } else {
+      startIndex = midIndex + 1;
+    }
+  }
+
+  return endIndex;
+}
+
+console.log(numArr.length - arr.length + 1);
