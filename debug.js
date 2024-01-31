@@ -1,20 +1,21 @@
-const input = `8`;
+const fs = require("fs");
+const input = fs.readFileSync("/dev/stdin").toString().trim();
 
 const N = Number(input);
 
-let queens = [];
-
 let count = 0;
 
-function possible(x, y) {
-  for (let arr of queens) {
-    const [a, b] = arr;
+let queens = [];
 
-    if (a === x || b === y) {
+function possible(row, column) {
+  for (let queen of queens) {
+    let [a, b] = queen;
+
+    if (a === row || b === column) {
       return false;
     }
 
-    if (Math.abs(a - x) === Math.abs(b - y)) {
+    if (Math.abs(a - row) === Math.abs(b - column)) {
       return false;
     }
   }
@@ -23,6 +24,7 @@ function possible(x, y) {
 }
 
 function dfs(row) {
+  // 1열부터 끝열까지 잘왔다면
   if (row === N) {
     count += 1;
   }
