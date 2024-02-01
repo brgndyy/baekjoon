@@ -1,5 +1,6 @@
-const input = `1
-3`.split("\n");
+const input = `2
+3
+7`.split("\n");
 
 const N = Number(input.shift());
 
@@ -12,19 +13,32 @@ for (let i = 0; i < N; i++) {
 
   let visited = Array(number).fill(false);
 
-  let selected = Array.from({ length: number }, (_, index) => index + 1);
+  let selected = Array(number).fill(0);
 
   dfs(0, number, visited, selected);
 }
 
 function dfs(depth, number, visited, selected) {
-  if (depth === selected[selected.length - 1]) {
+  if (depth === number) {
+    let result = [];
+
+    for (let i = 0; i < number; i++) {
+      result.push(seletec[i]);
+    }
+
+    return (answer += result.join(" ") + "\n");
   }
 
   for (let i = 1; i <= number; i++) {
     if (visited[i]) {
       continue;
     }
+
+    selected[depth] = i;
+
+    visited[i] = true;
+    dfs(depth + 1, number, visited, selected);
+    visited[i] = false;
   }
 }
 
