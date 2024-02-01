@@ -1,7 +1,7 @@
 const fs = require("fs");
-const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
+const input = fs.readFileSync("/dev/stdin").toString().trim();
 
-const N = Number(input);
+const [N, M] = input.split(" ").map(Number);
 
 let visited = Array(N).fill(false);
 
@@ -10,13 +10,14 @@ let selected = Array(N).fill(0);
 let answer = "";
 
 function dfs(depth) {
-  if (depth === N) {
+  if (depth === M) {
     let result = [];
-    for (let i = 0; i < N; i++) {
+
+    for (let i = 0; i < M; i++) {
       result.push(selected[i]);
     }
 
-    answer += result.join(" ") + "\n";
+    return (answer += result.join(" ") + "\n");
   }
 
   for (let i = 1; i <= N; i++) {
@@ -25,6 +26,7 @@ function dfs(depth) {
     }
 
     selected[depth] = i;
+
     visited[i] = true;
     dfs(depth + 1);
     visited[i] = false;
@@ -33,4 +35,4 @@ function dfs(depth) {
 
 dfs(0);
 
-console.log(answer.trim());
+console.log(answer);
