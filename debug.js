@@ -1,31 +1,41 @@
-const input = `1
-3`.split("\n");
+const input = `2
+3
+7`.split("\n");
 
 const N = Number(input.shift());
 
 let allTestCase = input.map(Number);
 
-let answer = [];
-
 for (let i = 0; i < N; i++) {
-  const number = allTestCase[i]; // 3
+  const number = allTestCase[i];
 
-  let visited = Array(number).fill(false);
+  let arr = Array.from({ length: number }, (_, index) => index + 1);
 
-  let selected = Array.from({ length: number }, (_, index) => index + 1);
-
-  dfs(0, number, visited, selected);
+  dfs([], 0, number, arr);
 }
 
-function dfs(depth, number, visited, selected) {
-  if (depth === selected[selected.length - 1]) {
-  }
+function dfs(result, depth, number, arr) {
+  if (depth === number - 1) {
+    let str = "";
 
-  for (let i = 1; i <= number; i++) {
-    if (visited[i]) {
-      continue;
+    for (let i = 0; i < result.length; i++) {
+      str += arr[i] + result[i];
     }
+
+    str += arr[result.length];
+
+    const sum = eval(str.split(" ").join(""));
+
+    if (sum === 0) {
+      console.log(str);
+    }
+    return;
+  }
+
+  for (let x of [" ", "+", "-"]) {
+    result.push(x);
+    dfs(result, depth + 1, number, arr);
+
+    result.pop();
   }
 }
-
-console.log(answer);
