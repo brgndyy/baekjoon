@@ -4,36 +4,37 @@ const input = `2
 
 const N = Number(input.shift());
 
-let allTestCase = input.map(Number);
+const numArr = input.map(Number);
 
 for (let i = 0; i < N; i++) {
-  const number = allTestCase[i];
+  const number = numArr[i];
 
-  let arr = Array.from({ length: number }, (_, index) => index + 1); // 숫자배열
+  const arr = Array.from({ length: number }, (_, index) => index + 1);
 
-  dfs([], 0, number, arr); // 여기서 빈배열은 result
+  dfs([], 0, number, arr);
 }
 
 function dfs(result, depth, number, arr) {
   if (depth === number - 1) {
-    let str = "";
+    let answer = "";
 
     for (let i = 0; i < result.length; i++) {
-      str += arr[i] + result[i];
+      answer += arr[i] + result[i];
     }
 
-    str += arr[result.length];
+    answer += arr[result.length]; // result.length 까지면 마지막 숫자는 추가가 안되므로 마지막숫자를 더해준다.
 
-    const sum = eval(str.split(" ").join(""));
+    let sum = eval(answer.split(" ").join(""));
 
     if (sum === 0) {
-      console.log(str);
+      console.log(answer);
     }
     return;
   }
 
   for (let x of [" ", "+", "-"]) {
     result.push(x);
+
     dfs(result, depth + 1, number, arr);
 
     result.pop();
