@@ -6,40 +6,36 @@ const N = Number(input.shift());
 
 let allTestCase = input.map(Number);
 
-let answer = [];
-
 for (let i = 0; i < N; i++) {
-  const number = allTestCase[i]; // 3
+  const number = allTestCase[i];
 
-  let visited = Array(number).fill(false);
+  let arr = Array.from({ length: number }, (_, index) => index + 1); // 숫자배열
 
-  let selected = Array(number).fill(0);
-
-  dfs(0, number, visited, selected);
+  dfs([], 0, number, arr); // 여기서 빈배열은 result
 }
 
-function dfs(depth, number, visited, selected) {
-  if (depth === number) {
-    let result = [];
+function dfs(result, depth, number, arr) {
+  if (depth === number - 1) {
+    let str = "";
 
-    for (let i = 0; i < number; i++) {
-      result.push(seletec[i]);
+    for (let i = 0; i < result.length; i++) {
+      str += arr[i] + result[i];
     }
 
-    return (answer += result.join(" ") + "\n");
+    str += arr[result.length];
+
+    const sum = eval(str.split(" ").join(""));
+
+    if (sum === 0) {
+      console.log(str);
+    }
+    return;
   }
 
-  for (let i = 1; i <= number; i++) {
-    if (visited[i]) {
-      continue;
-    }
+  for (let x of [" ", "+", "-"]) {
+    result.push(x);
+    dfs(result, depth + 1, number, arr);
 
-    selected[depth] = i;
-
-    visited[i] = true;
-    dfs(depth + 1, number, visited, selected);
-    visited[i] = false;
+    result.pop();
   }
 }
-
-console.log(answer);
