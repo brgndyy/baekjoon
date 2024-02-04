@@ -1,42 +1,44 @@
-const input = `2
-3
-7`.split("\n");
+const fs = require("fs");
+const input = fs.readFileSync("/dev/stdin").toString().trim().split(" ").map;
 
-const N = Number(input.shift());
+let [N, M] = input;
 
-const numArr = input.map(Number);
+let visited = Array(M).fill(false);
 
-for (let i = 0; i < N; i++) {
-  const number = numArr[i];
+let selected = Array(M).fill(0);
 
-  const arr = Array.from({ length: number }, (_, index) => index + 1);
+let answer = new Set();
 
-  dfs([], 0, number, arr);
-}
+function dfs(depth) {
+  if (depth === M) {
+    let result = [];
 
-function dfs(result, depth, number, arr) {
-  if (depth === number - 1) {
-    let answer = "";
-
-    for (let i = 0; i < result.length; i++) {
-      answer += arr[i] + result[i];
+    for (let i = 0; i < M; i++) {
+      result.push(selected[i]);
     }
 
-    answer += arr[result.length]; // result.length 까지면 마지막 숫자는 추가가 안되므로 마지막숫자를 더해준다.
+    result.sort((a, b) => a - b);
 
-    let sum = eval(answer.split(" ").join(""));
+    answer.add(result.join(","));
 
-    if (sum === 0) {
-      console.log(answer);
-    }
     return;
   }
 
-  for (let x of [" ", "+", "-"]) {
-    result.push(x);
+  for (let i = 1; i <= N; i++) {
+    if (visited[i]) {
+      continue;
+    }
 
-    dfs(result, depth + 1, number, arr);
+    selected[depth] = i;
 
-    result.pop();
+    visited[i] = true;
+
+    dfs(depth + 1);
+
+    visited[i] = false;
   }
 }
+
+dfs(0);
+
+[...answer].forEach((answer) => console.log(answer.split(",").join(" ")));
