@@ -9,9 +9,9 @@ let allTestCase = input.map(Number);
 for (let i = 0; i < N; i++) {
   const number = allTestCase[i];
 
-  let arr = Array.from({ length: number }, (_, index) => index + 1);
+  let arr = Array.from({ length: number }, (_, index) => index + 1); // 숫자배열
 
-  dfs([], 0, number, arr);
+  dfs([], 0, number, arr); // 여기서 빈배열은 result
 }
 
 function dfs(result, depth, number, arr) {
