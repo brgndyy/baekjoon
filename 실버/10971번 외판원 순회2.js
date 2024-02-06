@@ -20,7 +20,7 @@ function dfs(depth, start, cost) {
   }
 
   for (let i = 0; i < N; i++) {
-    if (visited[i] || cityArr[i][0] === 0) {
+    if (visited[i] || cityArr[start][i] === 0) {
       continue;
     }
 
@@ -34,3 +34,7 @@ visited[0] = true;
 dfs(0, 0, 0);
 
 console.log(min);
+
+// start => 현재 위치하고 있는 도시
+
+// cost => 현재까지의 비용
