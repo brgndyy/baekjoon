@@ -1,29 +1,37 @@
-const fs = require("fs");
-const input = fs
-  .readFileSync("/dev/stdin")
-  .toString()
-  .trim()
-  .split(" ")
-  .map(Number);
+const input = `4
+0 10 15 20
+5 0 9 10
+6 13 0 12
+8 8 9 0`.split("\n");
 
-const [N, M] = input;
+const N = Number(input.shift());
 
-let selected = Array(M).fill(0);
+const cityArr = input.map((city) => city.split(" ").map(Number));
 
-let answer = "";
+let visited = Array(N).fill(false);
 
-function dfs(depth, index) {
-  if (depth === M) {
-    answer += selected.join(" ") + "\n";
+let answer = Number.MAX_SAFE_INTEGER;
+
+function dfs(depth, start, cost) {
+  if (depth === N - 1 && cityArr[start][0] !== 0) {
+    answer = Math.min(answer, cost + cityArr[start][0]);
+
     return;
   }
 
-  for (let i = index; i <= N; i++) {
-    selected[depth] = i;
-    dfs(depth + 1, i);
+  for (let i = 0; i < N; i++) {
+    if (visited[i] || cityArr[start][i] === 0) {
+      continue;
+    }
+
+    visited[i] = true;
+    dfs(depth + 1, i, cost + cityArr[start][i]);
+    visited[i] = false;
   }
 }
 
-dfs(0, 1);
+visited[0] = true;
 
-console.log(answer.trim());
+dfs(0, 0, 0);
+
+console.log(answer);
