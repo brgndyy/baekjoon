@@ -8,9 +8,9 @@ const N = Number(input.shift());
 
 const tasteArr = input.map((taste) => taste.split(" ").map(Number));
 
-let result = [];
-
 let visited = Array(N).fill(false);
+
+let result = [];
 
 let answer = Number.MAX_SAFE_INTEGER;
 
@@ -20,26 +20,26 @@ function dfs(depth, start) {
     let totalBitter = 0;
 
     for (let x of tasteArr) {
-      totalSour *= x[0];
-      totalBitter += x[1];
+      let sour = x[0];
+      let bitter = x[1];
+
+      totalSour *= sour;
+      totalBitter += bitter;
     }
 
-    answer = Math.min(answer, Math.abs(totalSour - totalBitter));
+    answer = Math.min(answer, Math.abs(totalBitter - totalSour));
   }
 
-  for (let i = start; i < N; i++) {
+  for (let i = 0; i < N; i++) {
     if (visited[i]) {
       continue;
     }
 
     visited[i] = true;
-
     result.push(i);
-
-    dfs(depth + 1, i + 1);
-    visited[i] = false;
-
+    dfs(depth + 1, start + 1);
     result.pop();
+    visited[i] = false;
   }
 }
 
