@@ -1,46 +1,41 @@
-const input = `1
-3 10`.split("\n");
+const input = `7 1 2 3 4 5 6 7
+8 1 2 3 5 8 13 21 34
+0`.split("\n");
 
-const N = Number(input.shift());
+input.pop();
 
-const tasteArr = input.map((taste) => taste.split(" ").map(Number));
+let answer = "";
 
-let result = [];
+for (let i = 0; i < input.length; i++) {
+  let totalArr = input[i].split(" ").map(Number);
 
-let visited = Array(N).fill(0);
+  let N = totalArr[0];
 
-let answer = Number.MAX_SAFE_INTEGER;
+  let visited = Array(N).fill(false);
 
-function dfs(depth, start) {
-  if (depth >= 1) {
-    let totalSour = 1;
-    let totalBitter = 0;
+  let selected = Array(N - 1).fill(0);
 
-    for (let i = 0; i < result.length; i++) {
-      let index = result[i];
-      let sour = tasteArr[index][0];
-      let bitter = tasteArr[index][1];
+  dfs(0, 1, visited, totalArr, selected, N);
 
-      totalSour *= sour;
-      totalBitter += bitter;
-    }
+  answer += "\n";
+}
 
-    answer = Math.min(answer, Math.abs(totalBitter - totalSour));
+function dfs(depth, start, visited, totalArr, selected, N) {
+  if (depth === N - 1) {
+    console.log(selected);
+    return;
   }
 
-  for (let i = start; i < N; i++) {
+  for (let i = start; i <= N; i++) {
     if (visited[i]) {
       continue;
     }
 
     visited[i] = true;
-    result.push(i);
-    dfs(depth + 1, i + 1);
-    result.pop();
+    selected[depth] = totalArr[start];
+    dfs(depth + 1, i + 1, visited, totalArr, selected, N);
     visited[i] = false;
   }
 }
-
-dfs(0, 0);
 
 console.log(answer);
