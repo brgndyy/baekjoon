@@ -1,10 +1,11 @@
-const input = `8`.toString();
+const fs = require("fs");
+const input = fs.readFileSync("/dev/stdin").toString().trim();
 
-const N = Number(input);
-
-let count = 0;
+let N = Number(input);
 
 let queens = [];
+
+let count = 0;
 
 function possible(row, column) {
   for (let queen of queens) {
@@ -23,7 +24,6 @@ function possible(row, column) {
 }
 
 function dfs(row) {
-  // 1열부터 끝열까지 잘왔다면
   if (row === N) {
     count += 1;
   }
