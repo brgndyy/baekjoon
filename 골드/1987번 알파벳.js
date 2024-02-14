@@ -1,20 +1,23 @@
-const input = `2 4
-CAAB
-ADCB`.split("\n");
+const fs = require("fs");
+const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
 
 let [R, C] = input.shift().split(" ").map(Number);
-let mapArr = input.map((map) => map.split(""));
-let visited = new Set();
-let maxCount = 0;
+
+const mapArr = input.map((str) => str.split(""));
 
 let dx = [1, 0, -1, 0];
-let dy = [0, -1, 0, 1];
+let dy = [0, 1, 0, -1];
 
-function dfs(x, y, count) {
-  maxCount = Math.max(maxCount, count);
+let visited = new Set();
+
+let maxCount = 1;
+
+function dfs(depth, x, y) {
+  maxCount = Math.max(maxCount, depth);
 
   for (let i = 0; i < 4; i++) {
     let nx = x + dx[i];
+
     let ny = y + dy[i];
 
     if (
@@ -25,12 +28,14 @@ function dfs(x, y, count) {
       !visited.has(mapArr[nx][ny])
     ) {
       visited.add(mapArr[nx][ny]);
-      dfs(nx, ny, count + 1);
+      dfs(depth + 1, nx, ny);
       visited.delete(mapArr[nx][ny]);
     }
   }
 }
+
 visited.add(mapArr[0][0]);
-dfs(0, 0, 1);
+
+dfs(1, 0, 0);
 
 console.log(maxCount);
