@@ -7,30 +7,29 @@ const input = `7
 5 6
 4 7`.split("\n");
 
-let N = Number(input.shift());
-let M = Number(input.shift());
+const vertex = Number(input.shift());
 
-// let graph = Array(N + 1).fill([]); // 이러면 모두 같은 주소값을 갖는 배열이 되어버린다.
-let graph = Array.from({ length: N + 1 }, () => []);
+const edgesNum = Number(input.shift());
 
-let visited = Array(N + 1).fill(0);
+let visited = Array(vertex + 1).fill(false);
 
-let answer = 0;
+let graph = Array.from({ length: vertex + 1 }, () => []);
 
-for (let i = 0; i < M; i++) {
+let count = 0;
+
+for (let i = 0; i < edgesNum; i++) {
   let [x, y] = input[i].split(" ").map(Number);
-  graph[x].push(y);
+
   graph[y].push(x);
+  graph[x].push(y);
 }
 
 function dfs(vertex) {
   visited[vertex] = true;
-  answer++;
+  count += 1;
 
   for (let x of graph[vertex]) {
-    // 더 깊이 탐색하기 위해 반복문
     if (!visited[x]) {
-      // 방문처리가 되어있지 않다면
       dfs(x);
     }
   }
@@ -38,4 +37,4 @@ function dfs(vertex) {
 
 dfs(1);
 
-console.log(answer - 1); // 1번 노드는 제외해야하기때문에 -1을 해준다.
+console.log(count);
