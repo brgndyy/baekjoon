@@ -1,40 +1,55 @@
 const fs = require("fs");
 const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
 
-const [N, M] = input[0].split(" ").map(Number);
+const N = Number(input[0]);
 
-let graph = Array.from({ length: N + 1 }, () => []);
+let apartments = [];
 
-let visited = Array(N + 1).fill(false);
+let visited = Array.from({ length: N }, () => Array(N).fill(false));
 
-let answer = 0;
+let dx = [1, 0, -1, 0];
+let dy = [0, 1, 0, -1];
 
-for (let i = 1; i <= M; i++) {
-  const [x, y] = input[i].split(" ").map(Number);
-
-  graph[x].push(y);
-  graph[y].push(x);
-}
+let answer = [];
 
 for (let i = 1; i <= N; i++) {
-  if (!visited[i]) {
-    dfs(i);
-    answer += 1;
-  }
+  const line = input[i].split("").map(Number);
+
+  apartments.push(line);
 }
 
-function dfs(vertex) {
-  if (visited[vertex]) {
-    return;
-  }
-
-  visited[vertex] = true;
-
-  for (let x of graph[vertex]) {
-    if (!visited[x]) {
-      dfs(x);
+for (let i = 0; i < N; i++) {
+  for (let j = 0; j < N; j++) {
+    if (apartments[i][j] === 1 && !visited[i][j]) {
+      answer.push(dfs(i, j));
     }
   }
 }
 
-console.log(answer);
+function dfs(x, y) {
+  visited[x][y] = true;
+
+  let count = 1;
+
+  for (let i = 0; i < 4; i++) {
+    let nx = x + dx[i];
+    let ny = y + dy[i];
+
+    if (
+      nx >= 0 &&
+      ny >= 0 &&
+      nx < N &&
+      ny < N &&
+      !visited[nx][ny] &&
+      apartments[nx][ny] === 1
+    ) {
+      count += dfs(nx, ny);
+    }
+  }
+
+  return count;
+}
+
+console.log(answer.length);
+answer.sort((a, b) => a - b);
+console.log(answer.join("\n"));
