@@ -8,58 +8,54 @@ const input = `5
 const N = Number(input[0]);
 
 let field = [];
-
-let answer = [];
+let visited = Array.from({ length: N }, () => Array(N).fill(false));
 
 let dx = [1, 0, -1, 0];
 let dy = [0, 1, 0, -1];
 
+let answer = Number.MIN_SAFE_INTEGER;
+
+let min = Number.MAX_SAFE_INTEGER;
+let max = Number.MIN_SAFE_INTEGER;
+
 for (let i = 1; i <= N; i++) {
-  field.push(input[i].split(" ").map(Number));
+  const arr = input[i].split(" ").map(Number);
+  const maxNumber = Math.max(...arr);
+  const minNumber = Math.min(...arr);
+
+  min = Math.min(min, minNumber);
+  max = Math.max(max, maxNumber);
+
+  field.push(arr);
 }
 
-let visited = Array.from({ length: N }, () => Array(N).fill(false));
-
-let maxNum = Number.MIN_SAFE_INTEGER;
-let minNum = Number.MAX_SAFE_INTEGER;
-
-// 최소, 최댓값 구해주기
-for (let i = 0; i < N; i++) {
-  let max = Math.max(...field[i]);
-  let min = Math.min(...field[i]);
-
-  maxNum = Math.max(max, maxNum);
-  minNum = Math.min(min, minNum);
-}
-
-for (let height = minNum; height <= maxNum; height++) {
-  let safeZones = 0;
-  field = field.map((row) => row.map((value) => value));
+for (let height = min - 1; height <= max; height++) {
   visited = Array.from({ length: N }, () => Array(N).fill(false));
 
-  for (let i = 0; i < N; i++) {
-    for (let j = 0; j < N; j++) {
-      if (!visited[i][j] && field[i][j] > height) {
-        dfs(i, j, height);
-        safeZones++;
+  let count = 0;
+
+  for (let x = 0; x < N; x++) {
+    for (let y = 0; y < N; y++) {
+      if (!visited[x][y] && field[x][y] > height) {
+        dfs(x, y, height);
+        count += 1;
       }
     }
   }
-
-  answer.push(safeZones);
+  answer = Math.max(answer, count);
 }
 
 function dfs(x, y, height) {
   visited[x][y] = true;
 
-  for (let k = 0; k < 4; k++) {
-    const nx = x + dx[k];
-    const ny = y + dy[k];
+  for (let i = 0; i < 4; i++) {
+    const nx = x + dx[i];
+    const ny = y + dy[i];
 
     if (
       nx >= 0 &&
-      nx < N &&
       ny >= 0 &&
+      nx < N &&
       ny < N &&
       !visited[nx][ny] &&
       field[nx][ny] > height
