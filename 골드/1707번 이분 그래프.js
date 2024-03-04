@@ -8,33 +8,36 @@ const input = `2
 3 4
 4 2`.split("\n");
 
-// 이분 그래프인지 판단하는 함수
-function isBipartiteBFS(graph, Vertex) {
-  let color = Array(Vertex + 1).fill(0);
+function isBipartiteBfs(graph, vertex) {
+  let color = Array(vertex + 1).fill(0);
 
-  function bfs(start) {
-    let queue = [start];
-    color[start] = 1; // 시작 정점에 색상 1을 칠함
+  function bfs(vertex) {
+    const queue = [];
+    queue.push(vertex);
+    color[vertex] = 1;
 
-    while (queue.length > 0) {
-      let targetVertex = queue.shift();
+    while (queue.length) {
+      const targetVertex = queue.shift();
 
       for (let next of graph[targetVertex]) {
         if (color[next] === 0) {
-          color[next] = -color[v]; // 인접 정점에 반대 색상 칠하기
+          color[next] = -color[targetVertex];
           queue.push(next);
         } else if (color[next] === color[targetVertex]) {
           return false;
         }
       }
     }
+
     return true;
   }
 
-  for (let v = 1; v <= Vertex; v++) {
-    // BFS 탐색을 했을때 이분 그래프가 아니라면 false 반환
-    if (color[v] === 0 && !bfs(v)) return false;
+  for (let i = 1; i <= vertex; i++) {
+    if (color[i] === 0 && !bfs(i)) {
+      return false;
+    }
   }
+
   return true;
 }
 
@@ -49,6 +52,6 @@ for (let i = 1; i < input.length; i++) {
     graph[x].push(y);
     graph[y].push(x);
   }
-  console.log(isBipartiteBFS(graph, V) ? "YES" : "NO");
+  console.log(isBipartiteBfs(graph, V) ? "YES" : "NO");
   i += E;
 }
