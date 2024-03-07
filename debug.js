@@ -1,8 +1,9 @@
-const input = `6 4
-0 0 0 0 0 0
-0 0 0 0 0 0
-0 0 0 0 0 0
-0 0 0 0 0 1`.split("\n");
+const input = `5 5
+-1 1 0 0 0
+0 -1 -1 -1 0
+0 -1 -1 -1 0
+0 -1 -1 -1 0
+0 0 0 0 0`.split("\n");
 
 const [M, N] = input[0].split(" ").map(Number);
 
@@ -18,23 +19,35 @@ for (let i = 1; i <= N; i++) {
 }
 
 const visited = Array.from({ length: N }, () => Array(M).fill(0));
+const queue = [];
+let maxDay = 0;
 
 for (let i = 0; i < N; i++) {
   for (let j = 0; j < M; j++) {
-    if (input[i][j] === 1 && visited[i][j] === 0) {
-      bfs([i, j]);
+    if (field[i][j] === 1) {
+      queue.push([i, j, 0]);
     }
   }
 }
 
-function bfs([i, j]) {
-  const queue = [];
-  queue.push([i, j]);
-  visited[i][j] = 1;
-
-  let count;
-
+function bfs() {
   while (queue.length) {
-    const [currentX, currentY] = queue.shift();
+    const [currentX, currentY, day] = queue.shift();
+
+    maxDay = day;
+
+    for (let i = 0; i < 4; i++) {
+      const nx = currentX + dx[i];
+      const ny = currentY + dy[i];
+
+      if (nx >= 0 && ny >= 0 && nx < N && ny < M && field[nx][ny] === 0) {
+        field[nx][ny] = 1;
+        queue.push([nx, ny, day + 1]);
+      }
+    }
   }
 }
+
+bfs();
+
+console.log(maxDay);
