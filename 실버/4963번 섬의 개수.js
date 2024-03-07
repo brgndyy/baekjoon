@@ -27,57 +27,57 @@ const input = `1 1
 let dx = [1, 1, 0, -1, -1, -1, 0, 1];
 let dy = [0, 1, 1, 1, 0, -1, -1, -1];
 
-let answer = [];
-
-for (let i = 0; i < input.length; i++) {
-  const [w, h] = input.shift().split(" ").map(Number);
-
-  if (w === 0 && h === 0) {
-    break;
-  }
+let index = 0;
+while (index < input.length - 1) {
+  const [w, h] = input[index].split(" ").map(Number);
+  if (w === 0 && h === 0) break;
 
   let field = [];
-
-  let visited = Array.from({ length: h }, () => Array(w).fill(false));
-
-  let count = 0;
+  index++;
 
   for (let j = 0; j < h; j++) {
-    let line = input.shift().split(" ").map(Number);
-
+    const line = input[index + j].split(" ").map(Number);
     field.push(line);
   }
 
-  for (let x = 0; x < h; x++) {
-    for (let y = 0; y < w; y++) {
-      if (!visited[x][y] && field[x][y] === 1) {
-        dfs(x, y);
-        count += 1;
+  const visited = Array.from({ length: h }, () => Array(w).fill(false));
+
+  function bfs(startX, startY) {
+    const queue = [[startX, startY]];
+    visited[startX][startY] = true;
+
+    while (queue.length > 0) {
+      const [x, y] = queue.shift();
+
+      for (let i = 0; i < 8; i++) {
+        const nx = x + dx[i];
+        const ny = y + dy[i];
+
+        if (
+          nx >= 0 &&
+          nx < h &&
+          ny >= 0 &&
+          ny < w &&
+          field[nx][ny] === 1 &&
+          !visited[nx][ny]
+        ) {
+          visited[nx][ny] = true;
+          queue.push([nx, ny]);
+        }
       }
     }
   }
 
-  answer.push(count);
-
-  function dfs(x, y) {
-    visited[x][y] = true;
-
-    for (let i = 0; i < 8; i++) {
-      let nx = x + dx[i];
-      let ny = y + dy[i];
-
-      if (
-        nx >= 0 &&
-        ny >= 0 &&
-        nx < h &&
-        ny < w &&
-        !visited[nx][ny] &&
-        field[nx][ny] === 1
-      ) {
-        dfs(nx, ny);
+  let count = 0;
+  for (let i = 0; i < h; i++) {
+    for (let j = 0; j < w; j++) {
+      if (field[i][j] === 1 && !visited[i][j]) {
+        bfs(i, j);
+        count++;
       }
     }
   }
+
+  console.log(count);
+  index += h;
 }
-
-console.log(answer.join("\n"));
