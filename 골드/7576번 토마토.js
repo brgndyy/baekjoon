@@ -1,24 +1,21 @@
-const input = `5 5
--1 1 0 0 0
-0 -1 -1 -1 0
-0 -1 -1 -1 0
-0 -1 -1 -1 0
-0 0 0 0 0`.split("\n");
+const fs = require("fs");
+const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
 
 const [M, N] = input[0].split(" ").map(Number);
 
 let dx = [1, 0, -1, 0];
 let dy = [0, 1, 0, -1];
-const queue = [];
-let maxDay = 0;
 
 const field = [];
 
-for (let i = 1; i <= N; i++) {
+for (let i = 1; i < input.length; i++) {
   const line = input[i].split(" ").map(Number);
 
   field.push(line);
 }
+
+let maxDay = 0;
+const queue = [];
 
 for (let i = 0; i < N; i++) {
   for (let j = 0; j < M; j++) {
@@ -28,14 +25,16 @@ for (let i = 0; i < N; i++) {
   }
 }
 
-function bfs(queue) {
+function bfs() {
   while (queue.length) {
-    const [x, y, day] = queue.shift();
+    const [currentX, currentY, day] = queue.shift();
+
     maxDay = day;
 
     for (let i = 0; i < 4; i++) {
-      const nx = x + dx[i];
-      const ny = y + dy[i];
+      const nx = currentX + dx[i];
+      const ny = currentY + dy[i];
+
       if (nx >= 0 && ny >= 0 && nx < N && ny < M && field[nx][ny] === 0) {
         field[nx][ny] = 1;
         queue.push([nx, ny, day + 1]);
@@ -54,4 +53,4 @@ function bfs(queue) {
   return maxDay;
 }
 
-console.log(bfs(queue));
+console.log(bfs());
