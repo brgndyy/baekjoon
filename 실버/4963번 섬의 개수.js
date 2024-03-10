@@ -27,57 +27,60 @@ const input = `1 1
 let dx = [1, 1, 0, -1, -1, -1, 0, 1];
 let dy = [0, 1, 1, 1, 0, -1, -1, -1];
 
-let index = 0;
-while (index < input.length - 1) {
-  const [w, h] = input[index].split(" ").map(Number);
-  if (w === 0 && h === 0) break;
-
-  let field = [];
-  index++;
-
-  for (let j = 0; j < h; j++) {
-    const line = input[index + j].split(" ").map(Number);
-    field.push(line);
+for (let i = 0; i < input.length; i++) {
+  if (i === input.length - 1) {
+    break;
   }
 
-  const visited = Array.from({ length: h }, () => Array(w).fill(false));
+  const [w, h] = input[i].split(" ").map(Number);
 
-  function bfs(startX, startY) {
-    const queue = [[startX, startY]];
-    visited[startX][startY] = true;
+  const graph = [];
 
-    while (queue.length > 0) {
-      const [x, y] = queue.shift();
+  for (let j = 1 + i; j <= i + h; j++) {
+    const line = input[j].split(" ").map(Number);
 
-      for (let i = 0; i < 8; i++) {
-        const nx = x + dx[i];
-        const ny = y + dy[i];
-
-        if (
-          nx >= 0 &&
-          nx < h &&
-          ny >= 0 &&
-          ny < w &&
-          field[nx][ny] === 1 &&
-          !visited[nx][ny]
-        ) {
-          visited[nx][ny] = true;
-          queue.push([nx, ny]);
-        }
-      }
-    }
+    graph.push(line);
   }
 
+  let visited = Array.from({ length: h }, () => Array(w).fill(0));
   let count = 0;
+
   for (let i = 0; i < h; i++) {
     for (let j = 0; j < w; j++) {
-      if (field[i][j] === 1 && !visited[i][j]) {
+      if (graph[i][j] === 1 && visited[i][j] === 0) {
         bfs(i, j);
         count++;
       }
     }
   }
 
+  function bfs(i, j) {
+    const queue = [[i, j]];
+    visited[i][j] = 1;
+
+    while (queue.length) {
+      const [x, y] = queue.shift();
+      visited[x][y] = true;
+
+      for (let i = 0; i < 8; i++) {
+        let nx = dx[i] + x;
+        let ny = dy[i] + y;
+
+        if (
+          nx >= 0 &&
+          ny >= 0 &&
+          nx < h &&
+          ny < w &&
+          graph[nx][ny] === 1 &&
+          visited[nx][ny] === 0
+        ) {
+          queue.push([nx, ny]);
+        }
+      }
+    }
+  }
+
   console.log(count);
-  index += h;
+
+  i += h;
 }

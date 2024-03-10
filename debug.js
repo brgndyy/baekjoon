@@ -1,53 +1,86 @@
-const input = `5 5
--1 1 0 0 0
-0 -1 -1 -1 0
-0 -1 -1 -1 0
-0 -1 -1 -1 0
-0 0 0 0 0`.split("\n");
+const input = `1 1
+0
+2 2
+0 1
+1 0
+3 2
+1 1 1
+1 1 1
+5 4
+1 0 1 0 0
+1 0 0 0 0
+1 0 1 0 1
+1 0 0 1 0
+5 4
+1 1 1 0 1
+1 0 1 0 1
+1 0 1 0 1
+1 0 1 1 1
+5 5
+1 0 1 0 1
+0 0 0 0 0
+1 0 1 0 1
+0 0 0 0 0
+1 0 1 0 1
+0 0`.split("\n");
 
-const [M, N] = input[0].split(" ").map(Number);
+let dx = [1, 1, 0, -1, -1, -1, 0, 1];
+let dy = [0, 1, 1, 1, 0, -1, -1, -1];
 
-let dx = [1, 0, -1, 0];
-let dy = [0, 1, 0, -1];
-
-const field = [];
-
-for (let i = 1; i <= N; i++) {
-  const line = input[i].split(" ").map(Number);
-
-  field.push(line);
-}
-
-const visited = Array.from({ length: N }, () => Array(M).fill(0));
-const queue = [];
-let maxDay = 0;
-
-for (let i = 0; i < N; i++) {
-  for (let j = 0; j < M; j++) {
-    if (field[i][j] === 1) {
-      queue.push([i, j, 0]);
-    }
+for (let i = 0; i < input.length; i++) {
+  if (i === input.length - 1) {
+    break;
   }
-}
 
-function bfs() {
-  while (queue.length) {
-    const [currentX, currentY, day] = queue.shift();
+  const [w, h] = input[i].split(" ").map(Number);
 
-    maxDay = day;
+  const graph = [];
 
-    for (let i = 0; i < 4; i++) {
-      const nx = currentX + dx[i];
-      const ny = currentY + dy[i];
+  for (let j = 1 + i; j <= i + h; j++) {
+    const line = input[j].split(" ").map(Number);
 
-      if (nx >= 0 && ny >= 0 && nx < N && ny < M && field[nx][ny] === 0) {
-        field[nx][ny] = 1;
-        queue.push([nx, ny, day + 1]);
+    graph.push(line);
+  }
+
+  let visited = Array.from({ length: h }, () => Array(w).fill(0));
+  let count = 0;
+
+  for (let i = 0; i < h; i++) {
+    for (let j = 0; j < w; j++) {
+      if (graph[i][j] === 1 && visited[i][j] === 0) {
+        bfs(i, j);
+        count++;
       }
     }
   }
+
+  function bfs(i, j) {
+    const queue = [[i, j]];
+    visited[i][j] = 1;
+
+    while (queue.length) {
+      const [x, y] = queue.shift();
+      visited[x][y] = true;
+
+      for (let i = 0; i < 8; i++) {
+        let nx = dx[i] + x;
+        let ny = dy[i] + y;
+
+        if (
+          nx >= 0 &&
+          ny >= 0 &&
+          nx < h &&
+          ny < w &&
+          graph[nx][ny] === 1 &&
+          visited[nx][ny] === 0
+        ) {
+          queue.push([nx, ny]);
+        }
+      }
+    }
+  }
+
+  console.log(count);
+
+  i += h;
 }
-
-bfs();
-
-console.log(maxDay);
