@@ -27,13 +27,8 @@ const input = `1 1
 let dx = [1, 1, 0, -1, -1, -1, 0, 1];
 let dy = [0, 1, 1, 1, 0, -1, -1, -1];
 
-for (let i = 0; i < input.length; i++) {
-  if (i === input.length - 1) {
-    break;
-  }
-
+for (let i = 0; i < input.length - 1; i++) {
   const [w, h] = input[i].split(" ").map(Number);
-
   const graph = [];
 
   for (let j = 1 + i; j <= i + h; j++) {
@@ -42,14 +37,15 @@ for (let i = 0; i < input.length; i++) {
     graph.push(line);
   }
 
-  let visited = Array.from({ length: h }, () => Array(w).fill(0));
+  const visited = Array.from({ length: h }, () => Array(w).fill(0));
+
   let count = 0;
 
   for (let i = 0; i < h; i++) {
     for (let j = 0; j < w; j++) {
       if (graph[i][j] === 1 && visited[i][j] === 0) {
         bfs(i, j);
-        count++;
+        count += 1;
       }
     }
   }
@@ -59,12 +55,11 @@ for (let i = 0; i < input.length; i++) {
     visited[i][j] = 1;
 
     while (queue.length) {
-      const [x, y] = queue.shift();
-      visited[x][y] = true;
+      const [currentX, currentY] = queue.shift();
 
       for (let i = 0; i < 8; i++) {
-        let nx = dx[i] + x;
-        let ny = dy[i] + y;
+        const nx = currentX + dx[i];
+        const ny = currentY + dy[i];
 
         if (
           nx >= 0 &&
@@ -75,6 +70,7 @@ for (let i = 0; i < input.length; i++) {
           visited[nx][ny] === 0
         ) {
           queue.push([nx, ny]);
+          visited[nx][ny] = 1;
         }
       }
     }
