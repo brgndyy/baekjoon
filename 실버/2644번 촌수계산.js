@@ -1,5 +1,5 @@
 const input = `9
-8 6
+7 3
 7
 1 2
 1 3
@@ -10,42 +10,38 @@ const input = `9
 4 6`.split("\n");
 
 const n = Number(input[0]);
-
-const [targetParent, targetChild] = input[1].split(" ").map(Number);
-
+const [targetX, targetY] = input[1].split(" ").map(Number);
 const m = Number(input[2]);
-
 const graph = Array.from({ length: n + 1 }, () => []);
 let visited = Array(n + 1).fill(false);
 
 for (let i = 3; i < input.length; i++) {
-  const [x, y] = input[i].split(" ").map(Number);
+  const [parent, child] = input[i].split(" ").map(Number);
 
-  graph[x].push(y);
-  graph[y].push(x);
+  graph[parent].push(child);
+  graph[child].push(parent);
 }
 
-bfs();
-
 function bfs() {
-  const queue = [[targetParent, 0]];
-  visited[targetParent] = true;
+  const queue = [[targetX, 0]];
+  visited[targetX] = true;
 
   while (queue.length) {
-    const [current, numberOfRelatives] = queue.shift();
+    const [currentX, count] = queue.shift();
 
-    if (current === targetChild) {
-      console.log(numberOfRelatives);
-      return;
+    if (currentX === targetY) {
+      return count;
     }
 
-    for (const next of graph[current]) {
+    for (let next of graph[currentX]) {
       if (!visited[next]) {
         visited[next] = true;
-        queue.push([next, numberOfRelatives + 1]);
+        queue.push([next, count + 1]);
       }
     }
   }
 
-  console.log(-1);
+  return -1;
 }
+
+console.log(bfs());

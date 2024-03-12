@@ -1,83 +1,47 @@
-const input = `1 1
-0
-2 2
-0 1
-1 0
-3 2
-1 1 1
-1 1 1
-5 4
-1 0 1 0 0
-1 0 0 0 0
-1 0 1 0 1
-1 0 0 1 0
-5 4
-1 1 1 0 1
-1 0 1 0 1
-1 0 1 0 1
-1 0 1 1 1
-5 5
-1 0 1 0 1
-0 0 0 0 0
-1 0 1 0 1
-0 0 0 0 0
-1 0 1 0 1
-0 0`.split("\n");
+const input = `9
+7 3
+7
+1 2
+1 3
+2 7
+2 8
+2 9
+4 5
+4 6`.split("\n");
 
-let dx = [1, 1, 0, -1, -1, -1, 0, 1];
-let dy = [0, 1, 1, 1, 0, -1, -1, -1];
+const n = Number(input[0]);
+const [targetX, targetY] = input[1].split(" ").map(Number);
+const m = Number(input[2]);
+const graph = Array.from({ length: n + 1 }, () => []);
+let visited = Array(n + 1).fill(false);
 
-for (let i = 0; i < input.length; i++) {
-  if (i === input.length - 1) {
-    break;
-  }
-  const [w, h] = input[i].split(" ").map(Number);
+for (let i = 3; i < input.length; i++) {
+  const [parent, child] = input[i].split(" ").map(Number);
 
-  const field = [];
-  let visited = Array.from({ length: h }, () => Array(w).fill(0));
-  let count = 0;
-
-  for (let j = i + 1; j <= i + h; j++) {
-    const line = input[j].split(" ").map(Number);
-    field.push(line);
-  }
-
-  for (let i = 0; i < h; i++) {
-    for (let j = 0; j < w; j++) {
-      if (field[i][j] && visited[i][j] === 0) {
-        bfs(i, j);
-        count++;
-      }
-    }
-  }
-
-  function bfs(i, j) {
-    const queue = [[i, j]];
-    visited[i][j] = 1;
-
-    while (queue.length) {
-      const [currentX, currentY] = queue.shift();
-      visited[currentX][currentY] = 1;
-
-      for (let i = 0; i < 8; i++) {
-        const nx = currentX + dx[i];
-        const ny = currentY + dy[i];
-
-        if (
-          nx >= 0 &&
-          ny >= 0 &&
-          nx < h &&
-          ny < w &&
-          visited[nx][ny] === 0 &&
-          field[nx][ny] === 1
-        ) {
-          queue.push([nx, ny]);
-        }
-      }
-    }
-  }
-
-  console.log(count);
-
-  i += h;
+  graph[parent].push(child);
+  graph[child].push(parent);
 }
+
+function bfs() {
+  const queue = [[targetX, 0]];
+  visited[targetX] = true;
+
+  while (queue.length) {
+    const [currentX, count] = queue.shift();
+
+    if (currentX === targetY) {
+      return count;
+    }
+
+    for (let next of graph[currentX]) {
+      if (!visited[next]) {
+        visited[next] = true;
+        queue.push([next, count + 1]);
+      }
+    }
+  }
+
+  return -1;
+}
+
+console.log(bfs());
