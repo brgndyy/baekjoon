@@ -1,47 +1,33 @@
-const input = `9
-7 3
-7
-1 2
-1 3
-2 7
-2 8
-2 9
-4 5
-4 6`.split("\n");
+const input = `5 17`;
 
-const n = Number(input[0]);
-const [targetX, targetY] = input[1].split(" ").map(Number);
-const m = Number(input[2]);
-const graph = Array.from({ length: n + 1 }, () => []);
-let visited = Array(n + 1).fill(false);
+const [N, K] = input.split(" ").map(Number);
 
-for (let i = 3; i < input.length; i++) {
-  const [parent, child] = input[i].split(" ").map(Number);
+const MAX = 100000;
 
-  graph[parent].push(child);
-  graph[child].push(parent);
-}
+const visited = Array(MAX + 1).fill(false);
 
 function bfs() {
-  const queue = [[targetX, 0]];
-  visited[targetX] = true;
-
+  const queue = [];
+  queue.push([N, 0]);
+  visited[N] = true;
   while (queue.length) {
-    const [currentX, count] = queue.shift();
+    const [targetNumber, count] = queue.shift();
 
-    if (currentX === targetY) {
+    if (targetNumber === K) {
       return count;
     }
 
-    for (let next of graph[currentX]) {
-      if (!visited[next]) {
+    for (let next of [targetNumber - 1, targetNumber + 1, targetNumber * 2]) {
+      if (!visited[next] && next >= 0 && next <= MAX) {
         visited[next] = true;
-        queue.push([next, count + 1]);
+        if (next === targetNumber * 2) {
+          queue.unshift([next, count]);
+        } else {
+          queue.push([next, count + 1]);
+        }
       }
     }
   }
-
-  return -1;
 }
 
 console.log(bfs());
