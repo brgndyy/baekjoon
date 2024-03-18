@@ -38,4 +38,23 @@ for (let i = 0; i < field.length; i++) {
   }
 }
 
+function hasEatableFish(fishWeight) {
+  for (let i = 0; i < field.length; i++) {
+    for (let j = 0; j < field[i].length; j++) {
+      if (fishWeight > field[i][j]) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+function bfs() {
+  while (queue.length) {
+    const { position, weight, count } = queue.shift();
+    const [positionX, positionY] = position;
+  }
+}
+
 console.log(queue);
