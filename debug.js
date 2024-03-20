@@ -1,33 +1,21 @@
-const input = `5 17`;
+const input = `3
+4
+7
+10`.split("\n");
 
-const [N, K] = input.split(" ").map(Number);
+const testCase = Number(input[0]);
 
-const MAX = 100000;
+for (let i = 1; i < input.length; i++) {
+  let N = Number(input[i]);
 
-const visited = Array(MAX + 1).fill(false);
+  let dp = Array(N + 1).fill(0);
+  dp[0] = 1;
+  dp[1] = 1;
+  dp[2] = 2;
 
-function bfs() {
-  const queue = [];
-  queue.push([N, 0]);
-  visited[N] = true;
-  while (queue.length) {
-    const [targetNumber, count] = queue.shift();
-
-    if (targetNumber === K) {
-      return count;
-    }
-
-    for (let next of [targetNumber - 1, targetNumber + 1, targetNumber * 2]) {
-      if (!visited[next] && next >= 0 && next <= MAX) {
-        visited[next] = true;
-        if (next === targetNumber * 2) {
-          queue.unshift([next, count]);
-        } else {
-          queue.push([next, count + 1]);
-        }
-      }
-    }
+  for (let i = 3; i <= N; i++) {
+    dp[i] = dp[i - 1] + dp[i - 2] + dp[i - 3];
   }
-}
 
-console.log(bfs());
+  console.log(dp[N]);
+}
