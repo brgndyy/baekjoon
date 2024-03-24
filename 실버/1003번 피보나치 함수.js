@@ -21,7 +21,8 @@ for (let i = 1; i <= len; i++) {
   console.log(zeroCount + " " + oneCount);
 }
 
-// F(0) = zeroCount : 0, oneCount  = 0
-// F(1) = zeroCount : 1, oneCount = 1
-// F(2) = F(0) + F(1) 이고 이는 각각 zeroCount : 1, oneCount = 1
-// F(3) = F(1) + F(2) 이고 이는 각각 zeroCount : 2, oneCount  = 2
+// F(0) = zeroCount : 1, oneCount  = 0
+// F(1) = zeroCount : 0, oneCount = 1
+// F(2) = F(0) + F(1) 이고  zeroCount : 1, oneCount = 1
+// F(3) = F(1) + F(2) 이고  zeroCount : 1, oneCount  = 2
+// F(4) = F(2) + F(3) 이고  zeroCount : 2, oneCount = 3
