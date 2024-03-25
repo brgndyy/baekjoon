@@ -1,26 +1,21 @@
-const input = `3
-4
-7
-10`.split("\n");
+const input = `2
+6
+22`
+  .split("\n")
+  .map(Number);
 
-const T = Number(input[0]);
+const testCase = Number(input[0]);
 
-let answer = "";
+for (let i = 1; i <= testCase; i++) {
+  let zeroCount = 1;
+  let oneCount = 0;
 
-for (let i = 1; i <= T; i++) {
-  let N = Number(input[i]);
+  for (let j = 1; j <= input[i]; j++) {
+    let tmp = zeroCount;
+    zeroCount = oneCount;
 
-  let dp = Array(N + 1).fill(0);
-
-  dp[1] = 1;
-  dp[2] = 2;
-  dp[3] = 4;
-
-  for (let j = 4; j <= N; j++) {
-    dp[j] = dp[j - 3] + dp[j - 2] + dp[j - 1];
+    oneCount = zeroCount + tmp;
   }
 
-  answer += dp[N] + "\n";
+  console.log(zeroCount + " " + oneCount);
 }
-
-console.log(answer.trim());
