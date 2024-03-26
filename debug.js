@@ -1,20 +1,22 @@
-const input = `2
-6
-22`
+const fs = require("fs");
+const input = fs
+  .readFileSync("/dev/stdin")
+  .toString()
+  .trim()
   .split("\n")
   .map(Number);
 
-const testCase = Number(input[0]);
+const T = Number(input[0]);
 
-for (let i = 1; i <= testCase; i++) {
+for (let i = 1; i <= T; i++) {
   let zeroCount = 1;
   let oneCount = 0;
 
   for (let j = 1; j <= input[i]; j++) {
-    let tmp = zeroCount;
-    zeroCount = oneCount;
+    const tmpCount = zeroCount;
 
-    oneCount = zeroCount + tmp;
+    zeroCount = oneCount;
+    oneCount += tmpCount;
   }
 
   console.log(zeroCount + " " + oneCount);
