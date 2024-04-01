@@ -11,7 +11,9 @@ const input = `6
 const N = input[0];
 
 let dp = Array(N + 1).fill(0);
+
 dp[1] = input[1];
+
 if (N >= 2) {
   dp[2] = input[1] + input[2];
 }
