@@ -1,21 +1,21 @@
-const input = require("fs")
-  .readFileSync("/dev/stdin")
-  .toString()
-  .trim()
+const input = `2
+6
+22`
   .split("\n")
   .map(Number);
 
-const len = input[0];
+let T = input[0];
 
-for (let i = 1; i <= len; i++) {
-  let oneCount = 0; // 1이 출력되는 횟수
-  let zeroCount = 1; // 0이 출력되는 횟수
+for (let i = 1; i <= T; i++) {
+  let zeroCount = 1;
+  let oneCount = 0;
 
   for (let j = 1; j <= input[i]; j++) {
-    const tmpCount = zeroCount;
+    let tmpCount = zeroCount;
 
     zeroCount = oneCount;
-    oneCount = tmpCount + oneCount;
+
+    oneCount += tmpCount;
   }
 
   console.log(zeroCount + " " + oneCount);
