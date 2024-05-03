@@ -14,6 +14,7 @@ for (let i = 1; i <= N; i++) {
 
 let dp = Array.from({ length: N }, () => Array(3).fill(0));
 
+// dp[i][j]는 i번째 집을 j색으로 칠했을때의 최소 비용
 // 1번째 집을 빨강, 초록, 파랑 순서대로 칠했을때의 비용을 담는다.
 for (let j = 0; j < 3; j++) {
   dp[0][j] = arr[0][j];
