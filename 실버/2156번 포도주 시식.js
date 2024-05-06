@@ -8,22 +8,23 @@ const input = `6
   .split("\n")
   .map(Number);
 
-const N = input[0];
-
+const N = Number(input[0]);
 const dp = Array(N + 1).fill(0);
+const wine = Array(N + 1);
 
-dp[1] = input[1];
-
-if (N >= 2) {
-  dp[2] = input[1] + input[2];
+for (let i = 1; i <= N; i++) {
+  wine[i] = input[i];
 }
+
+if (N > 0) dp[1] = wine[1];
+if (N > 1) dp[2] = wine[1] + wine[2];
 
 for (let i = 3; i <= N; i++) {
   dp[i] = Math.max(
-    dp[i - 1],
-    dp[i - 2] + input[i],
-    dp[i - 3] + input[i - 1] + input[i]
+    dp[i - 3] + wine[i - 1] + wine[i],
+    dp[i - 2] + wine[i],
+    dp[i - 1]
   );
 }
 
-console.log(dp);
+console.log(Math.max(...dp));
